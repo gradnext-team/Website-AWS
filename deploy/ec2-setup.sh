@@ -3,7 +3,7 @@
 # Usage: bash ec2-setup.sh
 set -e
 
-REPO_URL="https://github.com/YOUR_ORG/YOUR_REPO.git"  # ← CHANGE THIS
+REPO_URL="https://github.com/gradnext-team/Website-AWS.git"
 
 echo "==> Updating system packages..."
 sudo apt update && sudo apt upgrade -y
