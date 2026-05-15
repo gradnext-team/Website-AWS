@@ -1,0 +1,77 @@
+{
+  "summary": "Completed testing of Competition Admin Settings Refactoring. Backend: 11/11 tests pass (100%). Frontend: All UI elements verified - 'Show in Navigation' checkbox replaces date field, 'Quiz End Time' is auto-calculated, visibility toggle button works correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_competition_nav_visibility.py",
+    "/app/test_reports/pytest/competition_nav_visibility_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Backend correctly implements show_in_nav boolean field with default=True",
+    "Backend auto-calculates quiz_end_time from quiz_start_time + duration_minutes",
+    "Public API /competitions/active correctly filters by show_in_nav=True",
+    "Frontend Create modal shows checkbox with helpful description",
+    "Frontend Edit modal shows 'End Time = Start Time + Duration' info box",
+    "Expanded competition view shows 'Navigation: Visible/Hidden' status instead of date"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_competition_nav_visibility.py - Created new test file for nav visibility feature"
+  ],
+  "success_rate": {
+    "backend": "100% (11/11 tests passed)",
+    "frontend": "100% - All UI elements verified via Playwright"
+  },
+  "test_credentials": {
+    "admin_mock_login": "POST /api/auth/mock-login?user_type=admin"
+  },
+  "seed_data_creation": "Created TEST_ prefixed competitions during backend testing (cleaned up after tests)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Competition admin settings refactoring fully tested. Backend uses show_in_nav boolean (default=True) instead of nav_visible_from datetime. quiz_end_time is auto-calculated from quiz_start_time + duration_minutes. Frontend Create/Edit modals show checkbox with description. Expanded view shows 'Navigation: Visible/Hidden' status. Toggle button in action row allows quick visibility changes.",
+  "features_verified": {
+    "backend_apis": {
+      "POST /api/competitions/admin/competitions": "Accepts show_in_nav boolean, auto-calculates quiz_end_time",
+      "PUT /api/competitions/admin/competitions/{id}": "Updates show_in_nav, recalculates end_time when duration changes",
+      "GET /api/competitions/competitions/active": "Filters by show_in_nav=True and is_active=True",
+      "GET /api/competitions/admin/competitions": "Returns all competitions (visible and hidden) for admin"
+    },
+    "frontend_create_modal": {
+      "show_in_nav_checkbox": "Checkbox with id='show_in_nav', default checked=True",
+      "checkbox_description": "When checked, competition appears in user sidebar",
+      "quiz_start_time": "datetime-local input field present",
+      "quiz_end_time": "NOT present - auto-calculated",
+      "nav_visible_from": "NOT present - replaced by checkbox",
+      "auto_calc_info": "Quiz automatically ends X minutes after start time"
+    },
+    "frontend_edit_modal": {
+      "show_in_nav_checkbox": "Checkbox with id='edit_show_in_nav'",
+      "end_time_info": "End Time = Start Time + Duration info box"
+    },
+    "frontend_expanded_view": {
+      "navigation_status": "Shows 'Navigation: Visible' or 'Navigation: Hidden' with icon",
+      "quiz_end_auto": "Shows 'Quiz End (Auto)' label",
+      "visibility_toggle": "Button showing 'Visible' or 'Hidden' to toggle show_in_nav"
+    }
+  },
+  "test_scenarios_covered": [
+    "Create competition with show_in_nav=true - appears in public API",
+    "Create competition with show_in_nav=false - hidden from public API",
+    "Create competition without nav_visible_from - works (field removed)",
+    "Quiz end time auto-calculated from start + duration",
+    "Toggle show_in_nav via update endpoint",
+    "Public API filters by show_in_nav=true",
+    "Update duration recalculates end time",
+    "Admin list shows both visible and hidden competitions",
+    "Create with minimum required fields (name + quiz_start_time)",
+    "Create fails without name",
+    "Create fails without quiz_start_time"
+  ]
+}

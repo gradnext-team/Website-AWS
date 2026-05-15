@@ -1,0 +1,25 @@
+{
+  "summary": "All backend + frontend tests for the 30% off 6-month subscription promo campaign pass. Backend: 7/7 pytest cases green (discount doc seeded correctly, /api/discounts/check-automatic gates correctly on order_type/billing_cycle, /api/payments/create-order applies 30% on 6-month and rejects on monthly). Frontend: PromoBanner renders on / and /subscription with correct copy ('30% off', 'Auto-applied at checkout', 'Ends 10 May 2026') and CTA pointing to /subscription#pricing-section, is absent on /coaching, sets --gn-promo-bar-h=40px CSS var, and dismiss persists in localStorage key gn_promo_dismissed_six-month-30-may2026 across reload. Subscription plan cards show SAVE 30% ribbon + 'Auto-applied at checkout' strip + 'You save … 10 May 2026' caption on 6-month, and these disappear when toggling to Monthly.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_six_month_promo.py",
+    "/app/test_reports/pytest/six_month_promo.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "validate_discount_applicability now correctly gates on applies_to_billing_cycle — rejects when billing_cycle absent or not in list. Good defensive default.",
+    "PromoBanner cleans up --gn-promo-bar-h on unmount (effect cleanup) — good.",
+    "Seed script is idempotent ($set on existing) — safe to re-run.",
+    "Minor: /api/discounts/check-automatic does not require billing_cycle as a path-level mandatory param; gating relies on validate_discount_applicability returning invalid. Behaviour is correct, but consider explicit 400 if a campaign needs billing_cycle and none supplied (current behaviour just returns has_discount:false which is acceptable for the UI flow).",
+    "PROMO_VERSION constant strategy is great for forcing re-show on copy changes."
+  ],
+  "updated_files": ["/app/backend/tests/test_six_month_promo.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Used pro@gradnext.co via /api/auth/mock-login (ENABLE_MOCK_LOGIN=true) for create-order test.",
+  "seed_data_creation": "Discount document promo-30-off-six-month-may2026 was already seeded; verified directly in MongoDB.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Promo campaign feature is fully working end-to-end. /api/discounts/check-automatic correctly returns 30% only when order_type=subscription AND billing_cycle=6-month. /api/payments/create-order re-validates and rejects monthly. Frontend banner is route-scoped via PromoBanner component, plan-card UI in SubscriptionLanding gates ribbon/strike-through on (billingCycle === '6-month' && isPromoActive()).",
+  "rca of the issue": "N/A — no bugs detected."
+}

@@ -1,0 +1,85 @@
+{
+  "summary": "Fixed two critical bugs: 1) Charts & Exhibits Hard drills now load correctly (was NameError), 2) Case Structuring drill labels now match time when clicking into drill (Easy=5min, Medium=10min, Hard=15min). Both backend and frontend fixes applied.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "critical": [],
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_drill_labels_time.py",
+    "/app/test_reports/pytest/drill_labels_time_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Backend fix: Added difficulty_labels_by_type and time_limits_by_type at module level in ai_drills.py (was only defined inside /list endpoint, causing NameError in /generate endpoint)",
+    "Frontend fix: Updated AIDrillModal.jsx to use time_limit from API response instead of hardcoded TIME_LIMITS based on difficulty"
+  ],
+  "updated_files": [
+    "/app/backend/routes/ai_drills.py",
+    "/app/frontend/src/components/ui/AIDrillModal.jsx"
+  ],
+  "success_rate": {
+    "backend": "100% (19/19 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "user": "Full Prep (fullprep@gradnext.co)",
+    "login_method": "/test-login page, click 'Aarav Agarwal'"
+  },
+  "seed_data_creation": "None - used existing drills",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Both bugs are now fixed. Charts & Exhibits Hard drills (ce-h-1 to ce-h-10) load correctly. Case Structuring drills show correct labels and times: Easy=5min, Medium=10min, Hard=15min.",
+  "bugs_fixed": {
+    "bug_1_charts_exhibits_hard_drills": {
+      "issue": "Charts & Exhibits Hard drills showed 'Failed to Load - No drills available' error",
+      "root_cause": "NameError in /generate endpoint - difficulty_labels_by_type and time_limits_by_type were only defined inside /list endpoint, not at module level",
+      "fix": "Added difficulty_labels_by_type and time_limits_by_type dictionaries at module level in /app/backend/routes/ai_drills.py (after DRILL_TYPES definition)",
+      "verification": "All 10 Hard drills (ce-h-1 to ce-h-10) now load successfully with correct 'Hard' label and 900s (15 min) time"
+    },
+    "bug_2_case_structuring_labels": {
+      "issue": "Case Structuring labels were wrong when clicking into drill - Easy drills showed 15 min, Medium showed easy, Hard showed medium",
+      "root_cause": "Frontend (AIDrillModal.jsx) was using hardcoded TIME_LIMITS based on difficulty instead of time_limit from API response",
+      "fix": "Updated generateDrill() in AIDrillModal.jsx to use response.data.time_limit from API instead of hardcoded TIME_LIMITS[actualDifficulty]",
+      "verification": "Case Structuring drills now show correct times: Easy=5min (4:58 timer), Medium=10min (9:58 timer), Hard=15min (14:58 timer)"
+    }
+  },
+  "test_results": {
+    "backend_tests": {
+      "total": 19,
+      "passed": 19,
+      "failed": 0,
+      "tests": [
+        "test_case_structuring_easy_label_and_time - PASSED (Easy, 300s)",
+        "test_case_structuring_medium_label_and_time - PASSED (Medium, 600s)",
+        "test_case_structuring_hard_label_and_time - PASSED (Hard, 900s)",
+        "test_case_math_easy_label_and_time - PASSED (Easy, 300s)",
+        "test_case_math_medium_label_and_time - PASSED (Medium, 600s)",
+        "test_case_math_hard_label_and_time - PASSED (Hard, 900s)",
+        "test_charts_exhibits_easy_label_and_time - PASSED (Easy, 300s)",
+        "test_charts_exhibits_medium_label_and_time - PASSED (Medium, 600s)",
+        "test_charts_exhibits_hard_label_and_time - PASSED (Hard, 900s)",
+        "test_charts_exhibits_hard_drills_load[ce-h-1] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-2] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-3] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-4] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-5] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-6] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-7] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-8] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-9] - PASSED",
+        "test_charts_exhibits_hard_drills_load[ce-h-10] - PASSED"
+      ]
+    },
+    "ui_verification": {
+      "charts_exhibits_hard_drill": "Drill 21 loads with 14:58 timer (15 min), questions visible, no errors",
+      "case_structuring_easy_drill": "Drill 1 loads with 4:58 timer (5 min), questions visible",
+      "case_structuring_medium_drill": "Drill 9 loads with 9:58 timer (10 min), questions visible"
+    }
+  }
+}

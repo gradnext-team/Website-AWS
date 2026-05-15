@@ -1,0 +1,69 @@
+{
+  "summary": "Completed comprehensive testing of Top-Up Session Coupon Integration. All 12 backend API tests pass (100%). Frontend UI verified - coupon toggle, input, apply, discount display, and removal all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_topup_coupon.py",
+    "/app/test_reports/pytest/topup_coupon_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_topup_coupon.py - Created new test file for top-up coupon integration"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "100% (all UI flows verified)"
+  },
+  "test_credentials": {
+    "admin_mock_login": "POST /api/auth/mock-login?user_type=admin",
+    "user_mock_login": "POST /api/auth/mock-login?user_type=subscription",
+    "test_coupon_code": "TOPUP20 (20% discount on coaching)"
+  },
+  "seed_data_creation": "Used existing TOPUP20 coupon for testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Top-up coupon integration fully tested. Backend: POST /api/payments/topup/create-order accepts optional coupon_discount_id, validates coupon for coaching type, applies discount after volume discount, records usage on payment verification. Frontend: CoachingPage.jsx has coupon toggle, input field, apply button, discount display, and removal functionality in the top-up modal.",
+  "features_verified": {
+    "backend_apis": {
+      "GET /api/payments/topup/pricing": "Returns base price and discount tiers",
+      "GET /api/payments/topup/pricing?session_count=N": "Returns calculated pricing for N sessions",
+      "POST /api/discounts/validate": "Validates coupon for coaching_topup plan_key",
+      "POST /api/payments/topup/create-order": "Creates order with optional coupon_discount_id",
+      "POST /api/payments/topup/verify": "Verifies payment and records coupon usage"
+    },
+    "frontend_ui": {
+      "top_up_sessions_button": "Opens top-up modal",
+      "have_coupon_code_link": "Shows coupon input when clicked",
+      "coupon_input_field": "Accepts coupon code entry",
+      "apply_button": "Validates and applies coupon",
+      "coupon_applied_display": "Shows discount amount and message",
+      "remove_button": "Removes applied coupon",
+      "purchase_button": "Shows updated total with coupon discount"
+    },
+    "discount_calculation": {
+      "volume_discount_applied_first": true,
+      "coupon_discount_applied_after_volume": true,
+      "gst_calculated_on_final_amount": true
+    }
+  },
+  "test_scenarios_covered": [
+    "Top-up pricing endpoint returns correct data",
+    "Coupon validation for coaching_topup plan_key",
+    "Create order without coupon",
+    "Create order with valid coupon",
+    "Create order with invalid coupon (gracefully ignored)",
+    "Volume discount tiers (5%, 10%, 15%, 20%)",
+    "Coupon applied after volume discount",
+    "Invalid coupon code rejection",
+    "Coupon validation response structure",
+    "Verify endpoint exists and handles requests"
+  ]
+}

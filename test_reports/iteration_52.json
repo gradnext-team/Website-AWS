@@ -1,0 +1,84 @@
+{
+  "summary": "Tested Case Structuring drills UI reordering feature. Found critical bug: Frontend displays WRONG difficulty labels and time limits. Sorting logic works correctly but badge display uses hardcoded DIFFICULTY_CONFIG instead of API data.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "critical": [
+      {
+        "component": "DrillsPage.jsx",
+        "issue": "Badge displays wrong difficulty label - uses DIFFICULTY_CONFIG[drill.difficulty].label instead of drill.difficulty_label from API",
+        "selector": "Badge component at line 387-389",
+        "priority": "HIGH",
+        "details": "Backend sends difficulty_label='Easy' for advanced drills, but frontend shows 'Hard' because it uses DIFFICULTY_CONFIG['advanced'].label"
+      },
+      {
+        "component": "DrillsPage.jsx", 
+        "issue": "Time display shows wrong duration - uses DIFFICULTY_CONFIG[drill.difficulty].time instead of drill.time_limit from API",
+        "selector": "Clock time display at line 390-393",
+        "priority": "HIGH",
+        "details": "Backend sends time_limit=300 (5 min) for advanced drills, but frontend shows '15 min' because it uses DIFFICULTY_CONFIG['advanced'].time"
+      }
+    ],
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix DrillsPage.jsx line 387-389: Change {diffConfig.label} to {drill.difficulty_label}",
+    "Fix DrillsPage.jsx line 392: Change {diffConfig.time} to format drill.time_limit (e.g., Math.floor(drill.time_limit/60) + ' min')",
+    "Update DIFFICULTY_CONFIG to use difficulty_label for badge styling lookup instead of difficulty field"
+  ],
+  "critical_code_review_comments": [
+    "The sorting logic at lines 193-210 is CORRECT - it sorts by drill.difficulty_label (Easy→Medium→Hard)",
+    "The bug is in the badge rendering at lines 349, 387-393 which uses DIFFICULTY_CONFIG[drill.difficulty] instead of API data",
+    "Backend has swapped labels: advanced='Easy', beginner='Medium', intermediate='Hard'",
+    "Frontend DIFFICULTY_CONFIG has original labels: beginner='Easy', intermediate='Medium', advanced='Hard'",
+    "This mismatch causes drills to display with wrong labels despite correct sorting"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - skipped per request",
+    "frontend": "0% - Critical display bug found"
+  },
+  "test_credentials": {
+    "user": "Aarav Agarwal (fullprep@gradnext.co)",
+    "login_method": "/test-login page"
+  },
+  "seed_data_creation": "",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Case Structuring drills sorting logic works correctly (sorts by difficulty_label from API). The bug is in badge display - frontend uses hardcoded DIFFICULTY_CONFIG instead of API data. After fix, verify: 1) Easy drills (1-8) show green 'Easy' badge with '5 min', 2) Medium drills (9-14) show yellow 'Medium' badge with '10 min', 3) Hard drills (15-20) show rose 'Hard' badge with '15 min'",
+  "rca_of_the_issue": {
+    "root_cause": "Mismatch between backend difficulty_labels mapping and frontend DIFFICULTY_CONFIG. Backend swapped labels (advanced='Easy', beginner='Medium', intermediate='Hard') but frontend still uses original mapping (beginner='Easy', intermediate='Medium', advanced='Hard'). Frontend renders badges using DIFFICULTY_CONFIG[drill.difficulty] instead of drill.difficulty_label from API.",
+    "reproduction_steps": [
+      "1. Login as Aarav Agarwal via /test-login",
+      "2. Navigate to Case Drills page",
+      "3. Click on Case Structuring tab",
+      "4. Observe drills 1-8 show 'Hard' badge with '15 min' (should be 'Easy' with '5 min')",
+      "5. Observe drills 9-14 show 'Easy' badge with '5 min' (should be 'Medium' with '10 min')",
+      "6. Observe drills 15-20 show 'Medium' badge with '10 min' (should be 'Hard' with '15 min')"
+    ],
+    "mitigation": "Update DrillsPage.jsx to use drill.difficulty_label for badge text and drill.time_limit for time display instead of DIFFICULTY_CONFIG lookup"
+  },
+  "features_verified": {
+    "drill_sorting": {
+      "status": "WORKING",
+      "evidence": "Drills are sorted by difficulty_label: cs-a-* (Easy) first, cs-b-* (Medium) second, cs-i-* (Hard) last"
+    },
+    "drill_numbering": {
+      "status": "WORKING", 
+      "evidence": "Drills are numbered 1-20 sequentially based on sorted order"
+    },
+    "badge_display": {
+      "status": "BROKEN",
+      "evidence": "Badge shows wrong label - 'Hard' for Easy drills, 'Easy' for Medium drills, 'Medium' for Hard drills"
+    },
+    "time_display": {
+      "status": "BROKEN",
+      "evidence": "Time shows wrong duration - '15 min' for 5 min drills, '5 min' for 10 min drills, '10 min' for 15 min drills"
+    }
+  }
+}

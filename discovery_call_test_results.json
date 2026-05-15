@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-04-22T14:59:58.554213",
+  "overall_success": true,
+  "test_results": [
+    {
+      "test": "Get Available Slots",
+      "success": true,
+      "message": "Found 18 available slots for 2026-04-27",
+      "details": {
+        "slots_count": 18,
+        "first_few_slots": [
+          "09:00",
+          "09:30",
+          "10:00"
+        ],
+        "date": "2026-04-27"
+      },
+      "timestamp": "2026-04-22T14:59:57.968562"
+    },
+    {
+      "test": "Get Questions",
+      "success": true,
+      "message": "Found 14 questions",
+      "details": {
+        "total_questions": 14,
+        "name_question_id": "c611ccc2-1109-4138-92cb-ccd63a3a70c2",
+        "email_question_id": "2026606d-339a-4f42-b32c-8db246dab682",
+        "phone_question_id": "e5e2f82a-8196-4463-923b-b43b7c27001c"
+      },
+      "timestamp": "2026-04-22T14:59:58.039637"
+    },
+    {
+      "test": "Book Slot",
+      "success": true,
+      "message": "Successfully booked slot 09:00 on 2026-04-27",
+      "details": {
+        "booking_id": "fd3f95f9-99f1-42c0-9871-8f351a3a4508",
+        "date": "2026-04-27",
+        "time": "09:00",
+        "user_email": "test.user@example.com",
+        "response": {
+          "success": true,
+          "booking_id": "fd3f95f9-99f1-42c0-9871-8f351a3a4508",
+          "message": "Your discovery call has been booked! You will receive a confirmation email shortly.",
+          "scheduled_datetime": "2026-04-27 09:00 IST"
+        }
+      },
+      "timestamp": "2026-04-22T14:59:58.446191"
+    },
+    {
+      "test": "Slot Unavailable After Booking",
+      "success": true,
+      "message": "Booked slot 09:00 correctly removed from available slots",
+      "details": {
+        "booked_slot": "09:00",
+        "slots_removed": 1,
+        "original_slots_count": 18,
+        "current_slots_count": 17
+      },
+      "timestamp": "2026-04-22T14:59:58.500308"
+    },
+    {
+      "test": "Double Booking Prevention",
+      "success": true,
+      "message": "Correctly blocked double booking with 409 Conflict",
+      "details": {
+        "status_code": 409,
+        "error_message": "This time slot has already been booked. Please select a different time.",
+        "attempted_slot": "2026-04-27 09:00"
+      },
+      "timestamp": "2026-04-22T14:59:58.553879"
+    },
+    {
+      "test": "Database Booking Fields",
+      "success": true,
+      "message": "Booking fd3f95f9-99f1-42c0-9871-8f351a3a4508 created - database field verification requires direct DB access",
+      "details": {
+        "booking_id": "fd3f95f9-99f1-42c0-9871-8f351a3a4508",
+        "note": "Manual verification needed: Check that booking has scheduled_date and scheduled_time fields"
+      },
+      "timestamp": "2026-04-22T14:59:58.553931"
+    }
+  ]
+}

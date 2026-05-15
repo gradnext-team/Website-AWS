@@ -1,0 +1,61 @@
+{
+  "summary": "Tested UI refinements for expired plans: 1) Sidebar correctly shows 'Plan Expired' with 'Renew Plan' button for expired subscription users (access_revoke_test@test.co), 2) Sidebar correctly shows 'Trial Expired' with 'Upgrade' button for expired trial users (expired@gradnext.com), 3) Peer Practice page is browsable (not full lock screen) for expired users. Backend APIs return correct expired flags.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_40.json"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% - APIs return correct expired flags (plan_expired, subscription_expired, trial_expired)",
+    "frontend": "100% - Sidebar and Peer Practice page display correctly for expired users"
+  },
+  "test_credentials": {
+    "expired_trial_user": {"email": "expired@gradnext.com", "password": "test123"},
+    "expired_pro_user": {"email": "access_revoke_test@test.co", "password": "test123"}
+  },
+  "seed_data_creation": "None - used existing test users",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "UI refinements for expired plans are working correctly. Sidebar shows 'Plan Expired' with 'Renew Plan' for expired subscription users and 'Trial Expired' with 'Upgrade' for expired trial users. Peer Practice page is browsable (not full lock screen). Note: Both test users don't have peer profiles set up, so they see 'Set Up Availability' instead of the peer list with greyed out buttons. The access_revoke_test@test.co user has an incomplete onboarding modal that appears on login.",
+  "features_tested": {
+    "sidebar_expired_subscription": {
+      "user": "access_revoke_test@test.co",
+      "expected": "Shows 'Plan Expired' with 'Renew Plan' button",
+      "result": "PASS - Sidebar shows 'Plan Expired' text, lock icon, red background, and 'Renew Plan' button"
+    },
+    "sidebar_expired_trial": {
+      "user": "expired@gradnext.com",
+      "expected": "Shows 'Trial Expired' with 'Upgrade' button",
+      "result": "PASS - Sidebar shows 'Trial Expired' text, lock icon, red background, and 'Upgrade' button"
+    },
+    "peer_practice_browsable": {
+      "expected": "Page is browsable (not full lock screen) for expired users",
+      "result": "PASS - Page shows 'Set Up Availability' for users without peer profile, not a full lock screen"
+    },
+    "backend_api_session_credits": {
+      "endpoint": "/api/peers/session-credits",
+      "result": "PASS - Returns plan_expired: true for both expired users"
+    },
+    "backend_api_dashboard_summary": {
+      "endpoint": "/api/resources/dashboard-summary",
+      "result": "PASS - Returns subscription_expired: true for expired pro user, trial_expired: true for expired trial user"
+    }
+  },
+  "verified_fixes": [
+    "DashboardLayout.jsx sidebar correctly shows 'Plan Expired' with 'Renew Plan' button when subscription_expired is true",
+    "DashboardLayout.jsx sidebar correctly shows 'Trial Expired' with 'Upgrade' button when trial_status.is_expired is true",
+    "PeerPracticePage.jsx keeps page browsable for expired users (not full lock screen)",
+    "Backend APIs return correct expired flags for both user types"
+  ],
+  "notes": "The greyed out book buttons and profile listing toggle could not be fully tested because both test users don't have peer profiles set up. They see 'Set Up Availability' instead of the peer list. To test the greyed out buttons, a user with an existing peer profile and expired plan would be needed."
+}

@@ -1,0 +1,74 @@
+{
+  "summary": "Verified bug fix: Strategy calls are now correctly excluded from mentor feedback prompts. All 8 backend tests passed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_strategy_call_feedback_exclusion.py",
+    "/app/test_reports/pytest/strategy_call_feedback_exclusion_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Fix verified: /mentor-dashboard/sessions/past (line 565-572) correctly excludes strategy calls using session_type filter",
+    "Fix verified: /mentor-dashboard/stats (line 185-189) correctly excludes strategy calls from pending_feedbacks count",
+    "Fix verified: /mentor-dashboard/sessions/pending-feedback (line 677-684) correctly excludes strategy calls",
+    "Fix verified: /feedback/pending-mandatory (line 105 for mentors, line 167 for candidates) correctly excludes strategy calls",
+    "All endpoints use consistent filter: session_type: {$nin: ['Strategy Call', 'strategy_call', 'Strategy call']}"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_strategy_call_feedback_exclusion.py"
+  ],
+  "success_rate": {
+    "backend": "100% (8/8 tests passed)",
+    "frontend": "N/A - skipped per request"
+  },
+  "test_credentials": {
+    "mentor": "mentor@gradnext.co (via mock-login?user_type=mentor)",
+    "candidate": "fullprep@gradnext.co (via mock-login?user_type=full_prep)"
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Strategy call feedback exclusion bug is fixed and verified. Strategy calls no longer appear in mentor's past sessions requiring feedback, pending feedback count, or mandatory feedback prompts.",
+  "features_verified": {
+    "past_sessions_excludes_strategy_calls": {
+      "status": "WORKING",
+      "endpoint": "/api/mentor-dashboard/sessions/past",
+      "evidence": "No strategy calls returned in past sessions list"
+    },
+    "stats_excludes_strategy_calls_from_pending": {
+      "status": "WORKING",
+      "endpoint": "/api/mentor-dashboard/stats",
+      "evidence": "pending_feedbacks count excludes strategy calls"
+    },
+    "pending_feedback_sessions_excludes_strategy_calls": {
+      "status": "WORKING",
+      "endpoint": "/api/mentor-dashboard/sessions/pending-feedback",
+      "evidence": "No strategy calls in pending feedback list"
+    },
+    "mandatory_feedback_excludes_strategy_calls": {
+      "status": "WORKING",
+      "endpoint": "/api/feedback/pending-mandatory",
+      "evidence": "Strategy calls don't trigger mandatory feedback prompts for mentors or candidates"
+    },
+    "upcoming_sessions_still_includes_strategy_calls": {
+      "status": "WORKING",
+      "endpoint": "/api/mentor-dashboard/sessions/upcoming",
+      "evidence": "Strategy calls still appear in upcoming sessions (correct behavior)"
+    }
+  },
+  "bug_fix_summary": {
+    "issue": "Mentors were seeing strategy calls in their past sessions requiring feedback",
+    "root_cause": "session_type filter was missing from /sessions/past and /stats endpoints",
+    "fix_applied": "Added session_type: {$nin: ['Strategy Call', 'strategy_call', 'Strategy call']} filter to exclude strategy calls",
+    "files_modified": [
+      "/app/backend/routes/mentor_dashboard.py (lines 185-189, 565-572)"
+    ]
+  }
+}

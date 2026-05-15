@@ -1,0 +1,49 @@
+{
+  "summary": "P0 verified: Mentor booking status-filter parity fix works. All 4 endpoints (availability, earliest-slots, book, reschedule) now use {\"$in\": [\"confirmed\", \"pending\", \"reschedule_pending\"]} consistently. 17/17 focused regression tests pass including the exact bug repro (admin cancels booking -> another user rebooks the same slot without 'conflict' error).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_booking_status_filter_parity.py",
+    "/app/test_reports/pytest/booking_status_filter_parity.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "/app/backend/routes/mentors.py line 242, 633, 651, 887, 1424 — all 4 endpoints now share the same status filter {\"$in\": [\"confirmed\", \"pending\", \"reschedule_pending\"]}. Verified by grep.",
+    "Code smell: The exact booking-conflict logic (forward + backward duration blocking, 30-min slot expansion) is duplicated between /availability (lines ~656-700) and /book (lines ~890-930). Recommend extracting into a single helper like `compute_blocked_slots(bookings, default_duration)` to prevent future drift of the kind this P0 bug was caused by. Same for the mongo filter constant — define `ACTIVE_BOOKING_STATUSES = [\"confirmed\", \"pending\", \"reschedule_pending\"]` at module level and reference everywhere.",
+    "Test-infra gap: DB had ZERO docs in mentor_weekly_availability collection across all 26 mentors. This means availability and booking are effectively untestable in this environment without seeding. Tests now seed 09:00-17:00 for all 7 days (TEST_avail_* ids, cleaned on teardown). Consider a dev seed script."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_booking_status_filter_parity.py"
+  ],
+  "success_rate": {
+    "backend": "100% (17/17)",
+    "frontend": "N/A (backend-only per request)"
+  },
+  "test_credentials": {
+    "mock_login": "POST /api/auth/mock-login?user_type={pinnacle|full_prep|subscription|admin|...}",
+    "user_used_for_booking": "pinnacle (unlimited coaching sessions)",
+    "secondary_user": "full_prep (for the admin-cancel -> rebook scenario)"
+  },
+  "seed_data_creation": "Seeded mentor_weekly_availability for the first mentor (mentor-aparajita) with 09:00-17:00 slots on all 7 days using TEST_avail_* ids. Also seeded and cleaned up TEST_* bookings for each status parametrization. Both are torn down via module-scoped autouse fixture.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "test_booking_status_filter_parity.py is the regression suite for this P0. Run with: REACT_APP_BACKEND_URL=... MONGO_URL=mongodb://localhost:27017 DB_NAME=gradnext pytest backend/tests/test_booking_status_filter_parity.py. It self-seeds weekly_availability and cleans up TEST_ prefixed docs. If adding tests that book many slots, use user_type=pinnacle (unlimited) to avoid quota-exhaustion flakiness — the fullprep user only has 10 sessions and ~8 get consumed by the parametrized runs.",
+  "coverage_detail": {
+    "non_blocking_statuses_verified_bookable": [
+      "mentor_cancelled", "candidate_cancelled", "admin_cancelled", "completed",
+      "mentor_rescheduled", "candidate_rescheduled", "admin_rescheduled",
+      "mentor_no_show", "candidate_no_show", "both_no_show"
+    ],
+    "blocking_statuses_verified_still_blocking": ["confirmed", "pending", "reschedule_pending"],
+    "forward_backward_blocking": "Verified: 9:30 booking (60min) still blocks 9:00 (backward) and 9:30 (forward) in both availability AND book endpoints.",
+    "earliest_slots": "Endpoint returns 200 and does not fail when cancelled-status bookings exist; uses same filter as availability.",
+    "admin_cancel_rebook_e2e": "User A books -> DB status flipped to admin_cancelled -> User B successfully rebooks same (date,slot) with 200. Original P0 bug repro passes."
+  }
+}

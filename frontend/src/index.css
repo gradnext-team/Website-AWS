@@ -1,0 +1,681 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import fonts - keeping previous fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap');
+
+/* Cohort landing utility classes */
+.font-display {
+  /* Match the main website's heading font for visual consistency */
+  font-family: 'Plus Jakarta Sans', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.cohort-dotted-bg {
+  background-image: radial-gradient(circle at 1px 1px, rgba(30, 27, 75, 0.08) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* ============================================
+   gradnext BRAND DESIGN SYSTEM
+   Based on Brand Guidelines v1
+   NO GRADIENTS - SOLID COLORS ONLY
+   ============================================ */
+
+:root {
+  /* Primary Brand Colors */
+  --gn-rhino: #2E3558;              /* Primary - Deep Blue */
+  --gn-rhino-dark: #2E356C;         /* Rhino Semitone Dark */
+  --gn-rhino-medium: #363EA7;       /* Rhino Semitone */
+  --gn-rhino-light: #5961ED;        /* Rhino Semitone Light */
+  
+  --gn-periwinkle: #8C9DFF;         /* Primary - Periwinkle Blue */
+  --gn-periwinkle-light: #B1BCFF;   /* Periwinkle Semitone */
+  --gn-periwinkle-lighter: #DEE3FF; /* Periwinkle Semitone Light */
+  
+  --gn-chrome-yellow: #FFA601;      /* Accent - Chrome Yellow */
+  --gn-chrome-light: #FFB62D;       /* Chrome Semitone */
+  --gn-chrome-lighter: #FFD68A;     /* Chrome Semitone Light */
+  --gn-chrome-lightest: #FFE6B7;    /* Chrome Semitone Lightest */
+  
+  /* Neutral Colors */
+  --gn-white: #FFFFFF;
+  --gn-black: #1A1A1A;              /* Rangoon Black */
+  
+  /* Grey Semitones - for text only, not backgrounds */
+  --gn-grey-dark: #323232;
+  --gn-grey: #808080;
+  --gn-grey-light: #EAEAEA;
+  
+  /* Semantic Colors */
+  --gn-success: #059669;
+  --gn-error: #DC2626;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 229 28% 26%;
+    --card: 0 0% 100%;
+    --card-foreground: 229 28% 26%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 229 28% 26%;
+    --primary: 233 65% 63%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 229 28% 26%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 229 28% 50%;
+    --accent: 39 100% 50%;
+    --accent-foreground: 229 28% 26%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 229 28% 90%;
+    --input: 229 28% 90%;
+    --ring: 233 65% 63%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-white text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--gn-rhino);
+  }
+  p {
+    color: var(--gn-grey-dark);
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY (Plus Jakarta Sans for headings)
+   ============================================ */
+
+.heading-xl {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--gn-rhino);
+}
+
+.heading-lg {
+  @apply text-3xl md:text-4xl font-bold tracking-tight;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--gn-rhino);
+}
+
+.heading-md {
+  @apply text-2xl md:text-3xl font-bold;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--gn-rhino);
+}
+
+.heading-sm {
+  @apply text-xl font-semibold;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--gn-rhino);
+}
+
+.body-lg {
+  @apply text-lg leading-relaxed;
+  color: var(--gn-grey-dark);
+}
+
+.body-base {
+  @apply text-base;
+  color: var(--gn-grey-dark);
+}
+
+.body-sm {
+  @apply text-sm;
+  color: var(--gn-grey);
+}
+
+/* Logo text style */
+.logo-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--gn-rhino);
+}
+
+/* ============================================
+   HERO SECTION WITH CONCENTRIC CIRCLES
+   ============================================ */
+
+.hero-section {
+  background-color: var(--gn-white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Concentric Circles Container */
+.hero-concentric {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Individual Circle Rings */
+.hero-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(140, 157, 255, 0.12);
+  animation: pulse-circle 8s ease-in-out infinite;
+}
+
+.hero-circle-1 {
+  width: 300px;
+  height: 300px;
+  border-color: rgba(140, 157, 255, 0.15);
+  animation-delay: 0s;
+}
+
+.hero-circle-2 {
+  width: 500px;
+  height: 500px;
+  border-color: rgba(140, 157, 255, 0.12);
+  animation-delay: 0.5s;
+}
+
+.hero-circle-3 {
+  width: 700px;
+  height: 700px;
+  border-color: rgba(177, 188, 255, 0.10);
+  animation-delay: 1s;
+}
+
+.hero-circle-4 {
+  width: 900px;
+  height: 900px;
+  border-color: rgba(177, 188, 255, 0.08);
+  animation-delay: 1.5s;
+}
+
+.hero-circle-5 {
+  width: 1100px;
+  height: 1100px;
+  border-color: rgba(222, 227, 255, 0.07);
+  animation-delay: 2s;
+}
+
+.hero-circle-6 {
+  width: 1300px;
+  height: 1300px;
+  border-color: rgba(222, 227, 255, 0.05);
+  animation-delay: 2.5s;
+}
+
+.hero-circle-7 {
+  width: 1500px;
+  height: 1500px;
+  border-color: rgba(222, 227, 255, 0.04);
+  animation-delay: 3s;
+}
+
+.hero-circle-8 {
+  width: 1700px;
+  height: 1700px;
+  border-color: rgba(222, 227, 255, 0.03);
+  animation-delay: 3.5s;
+}
+
+/* Subtle glow in center */
+.hero-center-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(140, 157, 255, 0.08) 0%, rgba(140, 157, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Concentric Circle Animation */
+@keyframes pulse-circle {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.02);
+    opacity: 0.7;
+  }
+}
+
+/* Remove old orb styles */
+.hero-orb-1,
+.hero-orb-2,
+.hero-orb-3 {
+  display: none;
+}
+
+/* ============================================
+   BUTTONS - NO GRADIENTS
+   Blue on Light, Yellow on Dark
+   ============================================ */
+
+/* Primary Blue Button - for light backgrounds */
+.btn-primary {
+  @apply font-semibold;
+  @apply px-6 py-3 rounded-xl;
+  @apply transition-all duration-200;
+  @apply shadow-sm hover:shadow-md;
+  background-color: var(--gn-rhino);
+  color: var(--gn-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--gn-rhino-dark);
+}
+
+/* Yellow Accent Button - for dark backgrounds ONLY */
+.btn-accent {
+  @apply font-semibold;
+  @apply px-6 py-3 rounded-xl;
+  @apply transition-all duration-200;
+  @apply shadow-sm hover:shadow-md;
+  background-color: var(--gn-chrome-yellow);
+  color: var(--gn-black);
+}
+
+.btn-accent:hover {
+  background-color: var(--gn-chrome-light);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  @apply font-medium;
+  @apply px-6 py-3 rounded-xl;
+  @apply transition-all duration-200;
+  background-color: var(--gn-periwinkle-lighter);
+  color: var(--gn-rhino);
+}
+
+.btn-secondary:hover {
+  background-color: var(--gn-periwinkle-light);
+}
+
+/* Outline Button - for light backgrounds */
+.btn-outline {
+  @apply border-2 font-medium;
+  @apply px-6 py-3 rounded-xl;
+  @apply transition-all duration-200;
+  @apply bg-white;
+  border-color: var(--gn-rhino);
+  color: var(--gn-rhino);
+}
+
+.btn-outline:hover {
+  background-color: var(--gn-rhino);
+  color: var(--gn-white);
+}
+
+/* Outline Button - for dark backgrounds */
+.btn-outline-light {
+  @apply border-2 font-medium;
+  @apply px-6 py-3 rounded-xl;
+  @apply transition-all duration-200;
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--gn-white);
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--gn-white);
+}
+
+/* ============================================
+   CARDS - WHITE BACKGROUNDS ONLY
+   ============================================ */
+
+.card-base {
+  @apply bg-white rounded-2xl;
+  @apply shadow-sm;
+  @apply transition-all duration-300;
+  border: 1px solid var(--gn-grey-light);
+}
+
+.card-base:hover {
+  @apply shadow-md;
+  border-color: var(--gn-periwinkle);
+}
+
+.card-hover {
+  @apply bg-white rounded-2xl;
+  @apply shadow-sm;
+  @apply transition-all duration-300;
+  border: 1px solid var(--gn-grey-light);
+}
+
+.card-hover:hover {
+  @apply shadow-lg;
+  border-color: var(--gn-periwinkle);
+  transform: translateY(-4px);
+}
+
+/* ============================================
+   BADGES & TAGS
+   ============================================ */
+
+.badge-primary {
+  @apply inline-flex items-center gap-2;
+  @apply px-4 py-2 rounded-full;
+  @apply text-sm font-medium;
+  background-color: var(--gn-periwinkle-lighter);
+  border: 1px solid var(--gn-periwinkle);
+  color: var(--gn-rhino);
+}
+
+.badge-success {
+  @apply inline-flex items-center;
+  @apply px-3 py-1 rounded-full;
+  @apply text-sm font-medium;
+  background-color: #ecfdf5;
+  color: var(--gn-success);
+}
+
+.badge-accent {
+  @apply inline-flex items-center;
+  @apply px-3 py-1 rounded-full;
+  @apply text-sm font-medium;
+  background-color: var(--gn-chrome-lightest);
+  color: var(--gn-black);
+}
+
+.tag-popular {
+  @apply absolute -top-3 left-1/2 transform -translate-x-1/2;
+  @apply px-4 py-1 rounded-full;
+  @apply text-sm font-semibold;
+  @apply shadow-lg;
+  background-color: var(--gn-rhino);
+  color: var(--gn-white);
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.stat-number {
+  @apply text-4xl md:text-5xl font-bold;
+  color: var(--gn-rhino);
+}
+
+.stat-number-light {
+  @apply text-4xl md:text-5xl font-bold;
+  color: var(--gn-white);
+}
+
+.stat-number-accent {
+  @apply text-4xl md:text-5xl font-bold;
+  color: var(--gn-chrome-yellow);
+}
+
+/* ============================================
+   ICONS
+   Dark icons on light, Yellow icons on dark
+   ============================================ */
+
+/* Dark icon box - for light backgrounds */
+.icon-box {
+  @apply w-12 h-12 rounded-xl;
+  @apply flex items-center justify-center;
+  background-color: var(--gn-periwinkle-lighter);
+  color: var(--gn-rhino);
+}
+
+.icon-box-lg {
+  @apply w-14 h-14 rounded-xl;
+  @apply flex items-center justify-center;
+  background-color: var(--gn-rhino);
+  color: var(--gn-white);
+}
+
+/* Yellow icon - for dark backgrounds */
+.icon-box-dark {
+  @apply w-12 h-12 rounded-xl;
+  @apply flex items-center justify-center;
+  background-color: rgba(255, 166, 1, 0.15);
+  color: var(--gn-chrome-yellow);
+}
+
+/* ============================================
+   PRICING CARDS
+   ============================================ */
+
+.plan-card {
+  @apply bg-white rounded-2xl p-8;
+  @apply shadow-sm;
+  @apply transition-all duration-300 relative;
+  border: 1px solid var(--gn-grey-light);
+}
+
+.plan-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-4px);
+}
+
+.plan-card.popular {
+  border: 2px solid var(--gn-rhino);
+  box-shadow: 0 0 0 4px var(--gn-periwinkle-lighter);
+}
+
+/* ============================================
+   TESTIMONIALS
+   ============================================ */
+
+.testimonial-card {
+  @apply bg-white rounded-2xl p-6;
+  @apply shadow-sm;
+  @apply transition-all duration-300;
+  border: 1px solid var(--gn-grey-light);
+}
+
+.testimonial-card:hover {
+  @apply shadow-md;
+  border-color: var(--gn-periwinkle);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.nav-link {
+  @apply px-4 py-2 rounded-lg;
+  @apply text-sm font-medium;
+  @apply transition-colors duration-200;
+  color: var(--gn-grey-dark);
+}
+
+.nav-link:hover {
+  color: var(--gn-rhino);
+  background-color: var(--gn-periwinkle-lighter);
+}
+
+.nav-link.active {
+  color: var(--gn-rhino);
+  background-color: var(--gn-periwinkle-lighter);
+}
+
+/* ============================================
+   SECTIONS - NO GREY BACKGROUNDS
+   ============================================ */
+
+.section-padding {
+  @apply py-12 md:py-14;
+}
+
+.section-header {
+  @apply text-center max-w-3xl mx-auto mb-8;
+}
+
+.section-header h2 {
+  @apply heading-lg mb-4;
+}
+
+.section-header p {
+  @apply body-lg;
+}
+
+/* Dark section - solid color */
+.dark-section {
+  background-color: var(--gn-rhino);
+}
+
+/* CTA Section - solid dark color */
+.cta-section {
+  @apply py-20;
+  background-color: var(--gn-rhino);
+}
+
+/* ============================================
+   FEATURE BOX - Periwinkle background allowed
+   ============================================ */
+
+.feature-box {
+  @apply rounded-2xl p-6;
+  background-color: var(--gn-periwinkle-lighter);
+  border: 1px solid var(--gn-periwinkle-light);
+}
+
+/* Dark feature box */
+.feature-box-dark {
+  @apply rounded-2xl p-6;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+
+/* Floating animations for hero section */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gn-white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gn-grey);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gn-grey-dark);
+}
+
+/* Brand utility classes */
+.bg-rhino { background-color: var(--gn-rhino); }
+.bg-periwinkle { background-color: var(--gn-periwinkle); }
+.bg-chrome { background-color: var(--gn-chrome-yellow); }
+.bg-periwinkle-box { background-color: var(--gn-periwinkle-lighter); }
+
+.text-rhino { color: var(--gn-rhino); }
+.text-periwinkle { color: var(--gn-periwinkle); }
+.text-chrome { color: var(--gn-chrome-yellow); }
+.text-white { color: var(--gn-white); }
+
+.border-rhino { border-color: var(--gn-rhino); }
+.border-periwinkle { border-color: var(--gn-periwinkle); }
+.border-chrome { border-color: var(--gn-chrome-yellow); }

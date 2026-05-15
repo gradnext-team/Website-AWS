@@ -1,0 +1,67 @@
+{
+  "summary": "Tested plan expiry access control for Peer Practice and Coaching pages. All backend APIs return correct expired flags. Frontend correctly shows 'Plan Expired' lock screen on Peer Practice page and 'Plan expired - Purchase sessions to book' message on Coaching page for expired users.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Sidebar",
+        "issue": "For expired pro user (access_revoke_test@test.co), sidebar shows 'Pro Plan Active' instead of indicating expired status",
+        "selector": ".sidebar [data-testid='plan-status']",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_peer_coaching_access.py",
+    "/app/test_reports/pytest/peer_coaching_access_results.xml"
+  ],
+  "action_items": [
+    "Consider updating sidebar to show 'Plan Expired' or similar indicator for expired pro/subscription users (currently shows 'Pro Plan Active' even when expired)"
+  ],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_peer_coaching_access.py"
+  ],
+  "success_rate": {
+    "backend": "100% (7/7 tests passed)",
+    "frontend": "100% (all lock screens verified)"
+  },
+  "test_credentials": {
+    "expired_trial_user": {"email": "expired@gradnext.com", "password": "test123"},
+    "expired_pro_user": {"email": "access_revoke_test@test.co", "password": "test123"},
+    "admin": {"email": "admin@gradnext.com", "password": "admin123"}
+  },
+  "seed_data_creation": "None - used existing test users",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Plan expiry access control is working correctly. Backend APIs (/api/peers/session-credits and /api/resources/dashboard-summary) return correct expired flags (plan_expired, use_item_level_locking, trial_expired, subscription_expired). Frontend PeerPracticePage shows 'Plan Expired' lock screen with 'Renew Subscription' button. CoachingPage shows 'Plan expired - Purchase sessions to book' message in header. The access_revoke_test@test.co user has an incomplete onboarding modal that appears on login.",
+  "features_tested": {
+    "backend": [
+      "GET /api/peers/session-credits - Returns has_access=false and plan_expired=true for expired trial user",
+      "GET /api/peers/session-credits - Returns has_access=false and plan_expired=true for expired pro user",
+      "GET /api/resources/dashboard-summary - Returns use_item_level_locking=true and trial_expired=true for expired trial user",
+      "GET /api/resources/dashboard-summary - Returns use_item_level_locking=true and subscription_expired=true for expired pro user",
+      "Coaching sessions remaining correctly shows 0 for expired users",
+      "Admin user access verified (regression test)"
+    ],
+    "frontend": [
+      "Peer Practice page shows 'Plan Expired' lock screen with lock icon for expired trial user",
+      "Peer Practice page shows 'Your plan has expired. Renew your subscription to continue practicing with peers.' message",
+      "Peer Practice page shows 'Renew Subscription' button for expired users",
+      "Coaching page shows 'Plan expired - Purchase sessions to book' message in header for expired trial user",
+      "Coaching page shows 'Top Up Sessions' button for expired users",
+      "Dashboard sidebar shows 'Trial Expired' warning for expired trial user"
+    ]
+  },
+  "verified_fixes": [
+    "Peer Practice /api/peers/session-credits endpoint correctly returns plan_expired: true for expired users",
+    "PeerPracticePage.jsx correctly checks sessionCredits.plan_expired and shows lock screen",
+    "CoachingPage.jsx correctly checks planStatus.use_item_level_locking and shows expired message",
+    "Dashboard summary correctly returns use_item_level_locking: true for expired users"
+  ]
+}

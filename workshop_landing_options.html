@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Landing Page Options - gradnext</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gn-rhino: #2e3558;
+      --gn-rhino-light: #3d4470;
+      --gn-periwinkle: #8c9dff;
+      --gn-periwinkle-light: #b1bcff;
+      --gn-chrome-yellow: #ffbf00;
+      --gn-grey: #6b7280;
+      --gn-grey-dark: #4b5563;
+      --gn-grey-light: #f3f4f6;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 32px rgba(46, 53, 88, 0.1);
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #f8f9ff 0%, #eef1ff 50%, #f0f4ff 100%);
+    }
+    .badge-live {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .option-divider {
+      background: linear-gradient(90deg, transparent, var(--gn-rhino), transparent);
+      height: 2px;
+      margin: 60px 0;
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+  
+  <!-- Header showing this is a mockup -->
+  <div class="bg-amber-50 border-b border-amber-200 p-4 text-center sticky top-0 z-50">
+    <p class="text-amber-800 font-medium">🎨 Workshop Landing Page Design Options - Click through to see 3 different layouts</p>
+    <div class="flex justify-center gap-4 mt-2">
+      <a href="#option1" class="px-4 py-1 bg-amber-100 rounded-full text-sm hover:bg-amber-200">Option 1: Card Grid</a>
+      <a href="#option2" class="px-4 py-1 bg-amber-100 rounded-full text-sm hover:bg-amber-200">Option 2: Timeline</a>
+      <a href="#option3" class="px-4 py-1 bg-amber-100 rounded-full text-sm hover:bg-amber-200">Option 3: Featured + List</a>
+    </div>
+  </div>
+
+  <!-- ==================== OPTION 1: CARD GRID LAYOUT ==================== -->
+  <section id="option1" class="py-16 px-4 max-w-7xl mx-auto">
+    <div class="bg-white/50 rounded-3xl p-8 mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">Option 1</span>
+        <span class="text-gray-500">Card Grid Layout</span>
+      </div>
+      <p class="text-gray-600 text-sm">Best for: Equal emphasis on all workshops, clean browsing experience</p>
+    </div>
+
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <span class="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" 
+            style="background: rgba(140, 157, 255, 0.15); color: var(--gn-rhino);">
+        Live Workshops
+      </span>
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--gn-rhino);">
+        Upcoming Workshops
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--gn-grey-dark);">
+        Join our expert-led sessions covering industry primers, case strategies, and interview preparation
+      </p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex justify-center gap-2 mb-8">
+      <button class="px-4 py-2 rounded-full font-medium text-white" style="background: var(--gn-rhino);">All Workshops</button>
+      <button class="px-4 py-2 rounded-full font-medium border" style="color: var(--gn-grey-dark); border-color: #e5e7eb;">Industry Primers</button>
+      <button class="px-4 py-2 rounded-full font-medium border" style="color: var(--gn-grey-dark); border-color: #e5e7eb;">Case Practice</button>
+      <button class="px-4 py-2 rounded-full font-medium border" style="color: var(--gn-grey-dark); border-color: #e5e7eb;">Interview Skills</button>
+    </div>
+
+    <!-- Workshop Cards Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Card 1 - Upcoming (Featured) -->
+      <div class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+        <div class="relative h-48 bg-gradient-to-br from-indigo-500 to-purple-600 p-6">
+          <div class="absolute top-4 left-4 flex items-center gap-2">
+            <span class="badge-live px-2 py-1 bg-red-500 text-white text-xs rounded-full flex items-center gap-1">
+              <span class="w-2 h-2 bg-white rounded-full"></span> LIVE
+            </span>
+            <span class="px-2 py-1 bg-white/20 text-white text-xs rounded-full">Industry Primer</span>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <h3 class="text-xl font-bold text-white mb-1">Fintech Industry Deep Dive</h3>
+            <p class="text-white/80 text-sm">Understanding digital payments, lending, and wealth management</p>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-4 text-sm" style="color: var(--gn-grey);">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Mar 20, 2026
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              7:00 PM IST
+            </span>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-10 h-10 rounded-full" alt="Host">
+            <div>
+              <p class="font-medium text-sm" style="color: var(--gn-rhino);">Rahul Sharma</p>
+              <p class="text-xs" style="color: var(--gn-grey);">Ex-McKinsey, 5+ years fintech</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm" style="color: var(--gn-grey);">42 registered</span>
+            <button class="px-4 py-2 rounded-lg font-medium text-white" style="background: var(--gn-rhino);">
+              Register Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+        <div class="relative h-48 bg-gradient-to-br from-emerald-500 to-teal-600 p-6">
+          <div class="absolute top-4 left-4">
+            <span class="px-2 py-1 bg-white/20 text-white text-xs rounded-full">Case Practice</span>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <h3 class="text-xl font-bold text-white mb-1">Market Sizing Masterclass</h3>
+            <p class="text-white/80 text-sm">Framework-based approach to market sizing problems</p>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-4 text-sm" style="color: var(--gn-grey);">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Mar 22, 2026
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              8:00 PM IST
+            </span>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face" class="w-10 h-10 rounded-full" alt="Host">
+            <div>
+              <p class="font-medium text-sm" style="color: var(--gn-rhino);">Priya Mehta</p>
+              <p class="text-xs" style="color: var(--gn-grey);">Ex-BCG, Case Interview Coach</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm" style="color: var(--gn-grey);">28 registered</span>
+            <button class="px-4 py-2 rounded-lg font-medium text-white" style="background: var(--gn-rhino);">
+              Register Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+        <div class="relative h-48 bg-gradient-to-br from-orange-500 to-red-500 p-6">
+          <div class="absolute top-4 left-4">
+            <span class="px-2 py-1 bg-white/20 text-white text-xs rounded-full">Interview Skills</span>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <h3 class="text-xl font-bold text-white mb-1">Fit Interview Excellence</h3>
+            <p class="text-white/80 text-sm">STAR method and behavioral questions mastery</p>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-4 mb-4 text-sm" style="color: var(--gn-grey);">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Mar 25, 2026
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              6:30 PM IST
+            </span>
+          </div>
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" class="w-10 h-10 rounded-full" alt="Host">
+            <div>
+              <p class="font-medium text-sm" style="color: var(--gn-rhino);">Aditya Kumar</p>
+              <p class="text-xs" style="color: var(--gn-grey);">Ex-Bain, HR Specialist</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm" style="color: var(--gn-grey);">35 registered</span>
+            <button class="px-4 py-2 rounded-lg font-medium text-white" style="background: var(--gn-rhino);">
+              Register Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- View All Link -->
+    <div class="text-center mt-8">
+      <a href="#" class="inline-flex items-center gap-2 font-medium" style="color: var(--gn-rhino);">
+        View all workshops
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+      </a>
+    </div>
+  </section>
+
+  <div class="option-divider max-w-4xl mx-auto"></div>
+
+  <!-- ==================== OPTION 2: TIMELINE LAYOUT ==================== -->
+  <section id="option2" class="py-16 px-4 max-w-5xl mx-auto">
+    <div class="bg-white/50 rounded-3xl p-8 mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Option 2</span>
+        <span class="text-gray-500">Timeline Layout</span>
+      </div>
+      <p class="text-gray-600 text-sm">Best for: Chronological focus, shows schedule clearly, good for recurring events</p>
+    </div>
+
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <span class="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" 
+            style="background: rgba(140, 157, 255, 0.15); color: var(--gn-rhino);">
+        Workshop Calendar
+      </span>
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--gn-rhino);">
+        This Week's Sessions
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--gn-grey-dark);">
+        Expert-led workshops happening this week. Reserve your spot now.
+      </p>
+    </div>
+
+    <!-- Week Navigation -->
+    <div class="flex justify-center items-center gap-4 mb-10">
+      <button class="p-2 rounded-full border hover:bg-gray-100" style="border-color: #e5e7eb;">
+        <svg class="w-5 h-5" style="color: var(--gn-grey);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+      </button>
+      <span class="font-semibold text-lg" style="color: var(--gn-rhino);">March 17 - 23, 2026</span>
+      <button class="p-2 rounded-full border hover:bg-gray-100" style="border-color: #e5e7eb;">
+        <svg class="w-5 h-5" style="color: var(--gn-grey);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+
+    <!-- Timeline -->
+    <div class="relative">
+      <!-- Timeline Line -->
+      <div class="absolute left-8 top-0 bottom-0 w-0.5" style="background: var(--gn-periwinkle-light);"></div>
+
+      <!-- Day 1 -->
+      <div class="relative mb-8">
+        <div class="flex items-start gap-6">
+          <!-- Date Circle -->
+          <div class="relative z-10 w-16 h-16 rounded-full flex flex-col items-center justify-center text-white font-bold" style="background: var(--gn-rhino);">
+            <span class="text-xs">MON</span>
+            <span class="text-lg">17</span>
+          </div>
+          <!-- Workshop Card -->
+          <div class="flex-1 glass-card rounded-xl p-5 hover:shadow-lg transition-shadow">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="badge-live px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded-full flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> TODAY
+                  </span>
+                  <span class="px-2 py-0.5 text-xs rounded-full" style="background: rgba(140, 157, 255, 0.15); color: var(--gn-rhino);">Industry Primer</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1" style="color: var(--gn-rhino);">Healthcare Industry Overview</h3>
+                <p class="text-sm mb-3" style="color: var(--gn-grey);">Understanding hospital economics, pharma, and health-tech trends</p>
+                <div class="flex items-center gap-4 text-sm" style="color: var(--gn-grey);">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    7:00 PM IST
+                  </span>
+                  <span>•</span>
+                  <span>90 mins</span>
+                  <span>•</span>
+                  <span>56 registered</span>
+                </div>
+              </div>
+              <button class="px-4 py-2 rounded-lg font-medium text-white whitespace-nowrap" style="background: var(--gn-rhino);">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="relative mb-8">
+        <div class="flex items-start gap-6">
+          <div class="relative z-10 w-16 h-16 rounded-full flex flex-col items-center justify-center font-bold border-2" style="border-color: var(--gn-periwinkle); color: var(--gn-rhino); background: white;">
+            <span class="text-xs">WED</span>
+            <span class="text-lg">19</span>
+          </div>
+          <div class="flex-1 glass-card rounded-xl p-5 hover:shadow-lg transition-shadow">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="px-2 py-0.5 text-xs rounded-full" style="background: rgba(16, 185, 129, 0.15); color: #059669;">Case Practice</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1" style="color: var(--gn-rhino);">Profitability Case Workshop</h3>
+                <p class="text-sm mb-3" style="color: var(--gn-grey);">Live case solving with feedback from ex-consultants</p>
+                <div class="flex items-center gap-4 text-sm" style="color: var(--gn-grey);">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    8:00 PM IST
+                  </span>
+                  <span>•</span>
+                  <span>75 mins</span>
+                  <span>•</span>
+                  <span>34 registered</span>
+                </div>
+              </div>
+              <button class="px-4 py-2 rounded-lg font-medium text-white whitespace-nowrap" style="background: var(--gn-rhino);">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="relative mb-8">
+        <div class="flex items-start gap-6">
+          <div class="relative z-10 w-16 h-16 rounded-full flex flex-col items-center justify-center font-bold border-2" style="border-color: var(--gn-periwinkle); color: var(--gn-rhino); background: white;">
+            <span class="text-xs">SAT</span>
+            <span class="text-lg">22</span>
+          </div>
+          <div class="flex-1 glass-card rounded-xl p-5 hover:shadow-lg transition-shadow">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="px-2 py-0.5 text-xs rounded-full" style="background: rgba(249, 115, 22, 0.15); color: #ea580c;">Interview Skills</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1" style="color: var(--gn-rhino);">Networking Strategies for Consulting</h3>
+                <p class="text-sm mb-3" style="color: var(--gn-grey);">How to reach out, what to say, and how to follow up</p>
+                <div class="flex items-center gap-4 text-sm" style="color: var(--gn-grey);">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    11:00 AM IST
+                  </span>
+                  <span>•</span>
+                  <span>60 mins</span>
+                  <span>•</span>
+                  <span>89 registered</span>
+                </div>
+              </div>
+              <button class="px-4 py-2 rounded-lg font-medium text-white whitespace-nowrap" style="background: var(--gn-rhino);">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="option-divider max-w-4xl mx-auto"></div>
+
+  <!-- ==================== OPTION 3: FEATURED + LIST LAYOUT ==================== -->
+  <section id="option3" class="py-16 px-4 max-w-6xl mx-auto">
+    <div class="bg-white/50 rounded-3xl p-8 mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">Option 3</span>
+        <span class="text-gray-500">Featured + List Layout</span>
+      </div>
+      <p class="text-gray-600 text-sm">Best for: Highlighting a main workshop while showing others, creates visual hierarchy</p>
+    </div>
+
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <span class="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" 
+            style="background: rgba(140, 157, 255, 0.15); color: var(--gn-rhino);">
+        Expert Workshops
+      </span>
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--gn-rhino);">
+        Learn from the Best
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--gn-grey-dark);">
+        Interactive sessions led by consultants from McKinsey, BCG, Bain, and more
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-8">
+      <!-- Featured Workshop (Large) -->
+      <div class="lg:col-span-3">
+        <div class="glass-card rounded-3xl overflow-hidden h-full">
+          <div class="relative h-64 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-8">
+            <div class="absolute top-6 left-6 flex items-center gap-2">
+              <span class="px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">⭐ FEATURED</span>
+              <span class="badge-live px-2 py-1 bg-red-500 text-white text-xs rounded-full flex items-center gap-1">
+                <span class="w-2 h-2 bg-white rounded-full"></span> LIVE SOON
+              </span>
+            </div>
+            <div class="absolute bottom-6 left-8 right-8">
+              <span class="inline-block px-3 py-1 bg-white/20 text-white text-sm rounded-full mb-3">Industry Primer</span>
+              <h3 class="text-2xl font-bold text-white mb-2">Private Equity & Venture Capital Fundamentals</h3>
+              <p class="text-white/80">Understanding deal structures, due diligence, and PE case interviews</p>
+            </div>
+          </div>
+          <div class="p-8">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-4">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=60&h=60&fit=crop&crop=face" class="w-14 h-14 rounded-full border-2 border-white shadow-lg" alt="Host">
+                <div>
+                  <p class="font-semibold" style="color: var(--gn-rhino);">Vikram Singh</p>
+                  <p class="text-sm" style="color: var(--gn-grey);">Ex-KKR, Private Equity Expert</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-bold text-2xl" style="color: var(--gn-rhino);">Mar 18</p>
+                <p class="text-sm" style="color: var(--gn-grey);">7:30 PM IST</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-6 text-sm" style="color: var(--gn-grey);">
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  124 registered
+                </span>
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  120 mins
+                </span>
+              </div>
+              <button class="px-6 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-shadow" style="background: linear-gradient(135deg, var(--gn-rhino) 0%, #4f46e5 100%);">
+                Reserve Your Spot →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workshop List -->
+      <div class="lg:col-span-2 space-y-4">
+        <h4 class="font-semibold mb-4" style="color: var(--gn-rhino);">More This Week</h4>
+        
+        <!-- List Item 1 -->
+        <div class="glass-card rounded-xl p-4 hover:shadow-lg transition-shadow cursor-pointer group">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              <span class="text-white text-xs font-medium">MAR</span>
+              <span class="text-white font-bold">19</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-semibold text-sm truncate" style="color: var(--gn-rhino);">Market Entry Case Framework</h5>
+              <p class="text-xs" style="color: var(--gn-grey);">8:00 PM • 60 mins • 42 registered</p>
+            </div>
+            <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--gn-rhino);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+        </div>
+
+        <!-- List Item 2 -->
+        <div class="glass-card rounded-xl p-4 hover:shadow-lg transition-shadow cursor-pointer group">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+              <span class="text-white text-xs font-medium">MAR</span>
+              <span class="text-white font-bold">20</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-semibold text-sm truncate" style="color: var(--gn-rhino);">Aviation Industry Deep Dive</h5>
+              <p class="text-xs" style="color: var(--gn-grey);">7:00 PM • 90 mins • 67 registered</p>
+            </div>
+            <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--gn-rhino);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+        </div>
+
+        <!-- List Item 3 -->
+        <div class="glass-card rounded-xl p-4 hover:shadow-lg transition-shadow cursor-pointer group">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+              <span class="text-white text-xs font-medium">MAR</span>
+              <span class="text-white font-bold">21</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-semibold text-sm truncate" style="color: var(--gn-rhino);">Fit Interview Q&A Session</h5>
+              <p class="text-xs" style="color: var(--gn-grey);">6:30 PM • 45 mins • 89 registered</p>
+            </div>
+            <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--gn-rhino);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+        </div>
+
+        <!-- List Item 4 -->
+        <div class="glass-card rounded-xl p-4 hover:shadow-lg transition-shadow cursor-pointer group">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl flex flex-col items-center justify-center" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+              <span class="text-white text-xs font-medium">MAR</span>
+              <span class="text-white font-bold">23</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-semibold text-sm truncate" style="color: var(--gn-rhino);">Resume Review Workshop</h5>
+              <p class="text-xs" style="color: var(--gn-grey);">11:00 AM • 90 mins • 156 registered</p>
+            </div>
+            <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" style="color: var(--gn-rhino);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+        </div>
+
+        <!-- View All -->
+        <a href="#" class="block text-center py-3 font-medium hover:underline" style="color: var(--gn-rhino);">
+          View Full Calendar →
+        </a>
+      </div>
+    </div>
+
+    <!-- Past Workshops Section (Optional Addition) -->
+    <div class="mt-16">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold" style="color: var(--gn-rhino);">📚 Past Workshop Recordings</h3>
+        <span class="text-sm" style="color: var(--gn-grey);">Available for Pro & Pro Plus members</span>
+      </div>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-xl p-4 opacity-90">
+          <div class="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+            <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <h5 class="font-medium text-sm truncate" style="color: var(--gn-rhino);">FMCG Industry Primer</h5>
+          <p class="text-xs" style="color: var(--gn-grey);">Mar 10 • 85 mins</p>
+        </div>
+        <div class="glass-card rounded-xl p-4 opacity-90">
+          <div class="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+            <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <h5 class="font-medium text-sm truncate" style="color: var(--gn-rhino);">Pricing Cases Masterclass</h5>
+          <p class="text-xs" style="color: var(--gn-grey);">Mar 8 • 70 mins</p>
+        </div>
+        <div class="glass-card rounded-xl p-4 opacity-90">
+          <div class="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+            <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <h5 class="font-medium text-sm truncate" style="color: var(--gn-rhino);">McKinsey PST Strategies</h5>
+          <p class="text-xs" style="color: var(--gn-grey);">Mar 5 • 90 mins</p>
+        </div>
+        <div class="glass-card rounded-xl p-4 opacity-90">
+          <div class="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+            <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <h5 class="font-medium text-sm truncate" style="color: var(--gn-rhino);">Telecom Industry Primer</h5>
+          <p class="text-xs" style="color: var(--gn-grey);">Mar 3 • 75 mins</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary Section -->
+  <section class="py-16 px-4 max-w-4xl mx-auto">
+    <div class="glass-card rounded-3xl p-8">
+      <h2 class="text-2xl font-bold mb-6" style="color: var(--gn-rhino);">Summary of Options</h2>
+      
+      <div class="space-y-6">
+        <div class="flex items-start gap-4">
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium whitespace-nowrap">Option 1</span>
+          <div>
+            <h4 class="font-semibold" style="color: var(--gn-rhino);">Card Grid Layout</h4>
+            <p class="text-sm" style="color: var(--gn-grey);">✓ Visual impact with colored headers • ✓ Filter by category • ✓ Equal emphasis on all workshops • Best for: Browsing multiple workshops</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium whitespace-nowrap">Option 2</span>
+          <div>
+            <h4 class="font-semibold" style="color: var(--gn-rhino);">Timeline Layout</h4>
+            <p class="text-sm" style="color: var(--gn-grey);">✓ Chronological focus • ✓ Week-by-week navigation • ✓ Clear schedule view • Best for: Planning and scheduling</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium whitespace-nowrap">Option 3</span>
+          <div>
+            <h4 class="font-semibold" style="color: var(--gn-rhino);">Featured + List Layout</h4>
+            <p class="text-sm" style="color: var(--gn-grey);">✓ Highlights important workshops • ✓ Visual hierarchy • ✓ Includes past recordings • Best for: Promoting key events</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 p-4 rounded-xl" style="background: rgba(140, 157, 255, 0.1);">
+        <p class="text-sm" style="color: var(--gn-rhino);">
+          <strong>💡 Recommendation:</strong> Option 3 (Featured + List) works best for a home page tab as it:
+          <br>• Creates visual interest with a featured workshop
+          <br>• Shows upcoming sessions without overwhelming
+          <br>• Includes past recordings to show content value
+          <br>• Can be combined with Option 1's filter tabs for a dedicated workshops page
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 text-center" style="color: var(--gn-grey);">
+    <p class="text-sm">These are design mockups only. No backend functionality included.</p>
+  </footer>
+
+</body>
+</html>

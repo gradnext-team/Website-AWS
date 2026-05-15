@@ -1,0 +1,52 @@
+"""
+One-time debug endpoint to expose exactly what's being counted in sales summary
+Add this temporarily to sales_admin.py to debug production
+"""
+
+# ADD THIS TO sales_admin.py temporarily
+
+@router.get("/debug-summary")
+async def debug_sales_summary(request: Request):
+    """
+    DEBUG ENDPOINT: Shows exactly what's being counted and why
+    """
+    await verify_admin(request)
+    db = get_db(request)
+    
+    # Get the same data as summary endpoint
+    paid_orders = await db.payment_orders.find(
+        {"status": {"$in": ["paid", "completed"]}},
+        {"_id": 0, "id": 1, "amount": 1, "status": 1, "plan_key": 1, "user_id": 1}
+    ).to_list(10000)
+    
+    captured_payments = await db.payments.find(
+        {"status": "captured"},
+        {"_id": 0, "id": 1, "amount": 1, "status": 1, "plan_key": 1, "user_id": 1}
+    ).to_list(10000)
+    
+    # Calculate sums
+    sum_payment_orders = sum(o.get("amount", 0) for o in paid_orders)
+    sum_payments = sum(p.get("amount", 0) for p in captured_payments)
+    
+    return {
+        "payment_orders": {
+            "count": len(paid_orders),
+            "sum": sum_payment_orders,
+            "sample": paid_orders[:3] if paid_orders else []
+        },
+        "payments": {
+            "count": len(captured_payments),
+            "sum": sum_payments,
+            "sample": captured_payments[:3] if captured_payments else []
+        },
+        "totals_before_dedup": {
+            "count": len(paid_orders) + len(captured_payments),
+            "sum": sum_payment_orders + sum_payments
+        },
+        "amounts_look_like_paisa": sum_payment_orders > 1000000,  # If sum is > 10 lakhs, likely in paisa
+        "if_converted_from_paisa": {
+            "payment_orders_sum_in_rupees": sum_payment_orders / 100,
+            "payments_sum_in_rupees": sum_payments / 100,
+            "total_in_rupees": (sum_payment_orders + sum_payments) / 100
+        }
+    }

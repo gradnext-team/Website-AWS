@@ -1,0 +1,55 @@
+{
+  "summary": "Backend (8/8 pytest) PASS for cohort-merge admin endpoint, source-filter status combinations, session-price shape, create-session-order-with-slot, credit-booking regression. Frontend mentor unblur works (no .blur-sm elements on mentor cards for free_trial). CRITICAL bug: free-trial 'Book Now' still detours to old 'Coaching Access Required' modal instead of opening the slot picker directly — violates the P0 spec for direct-pay flow. Admin source-filter & cohort badges could not be UI-verified (mock-admin click never landed on /admin?section=discovery-calls; locator timed out).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "CoachingPage.jsx (free_trial)",
+        "issue": "Clicking [data-testid^='mentor-card-...'] 'Book Now' on a free-trial user (0 credits, no coaching plan) opens the legacy 'Coaching Access Required' modal (Book Single Session / View Coaching Plans) instead of the slot-picker dialog with the new payment-method radios (pay-with-credit-radio / pay-direct-radio). Spec explicitly says this detour must be removed for both credit and non-credit users.",
+        "selector": "button:has-text('Book Now') on mentor card → expected slot picker; got 'Coaching Access Required' dialog",
+        "priority": "CRITICAL"
+      },
+      {
+        "component": "DiscoveryCallsSection.jsx (admin UI)",
+        "issue": "UI verification of [data-testid='discovery-source-filter'] and [data-testid^='cohort-badge-'] timed out — could not confirm rendering end-to-end. Component code DOES have the testids and source filter, but admin-section did not render in the headless run (mock-admin login flow may need explicit redirect). Backend merge response is correct (verified via pytest — cohort entries returned with source=cohort, cohort_name, etc.) so risk is UI-only.",
+        "selector": "[data-testid='discovery-source-filter']",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Direct-pay coaching booking from dashboard",
+        "issue": "Free-trial user cannot reach the new payment radios because Book Now still hits the old gate modal. Need to remove the conditional that routes free-trial / no-credit users to the purchase-session modal in handleMentorClick / handleBookSession (CoachingPage.jsx ~line 700/1195).",
+        "affected_selectors": ["pay-with-credit-radio", "pay-direct-radio", "mentor-card-{id} > Book Now"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_discovery_merge_and_payments.py",
+    "/app/test_reports/pytest/discovery_merge_payments.xml"
+  ],
+  "action_items": [
+    "FIX (P0): In CoachingPage.jsx, remove the 'Coaching Access Required' / 'Unlock Coaching Sessions' detour for users without credits. handleMentorClick / Book Now should ALWAYS open the slot-picker dialog. The pay-direct radio should appear regardless of credit balance, and the pay-with-credit radio should only appear when credits > 0 or unlimited.",
+    "VERIFY: Re-run the frontend Playwright flow once the gate is removed to confirm pay-direct-radio + pay-with-credit-radio render and that the confirm button switches to 'Pay ₹X & Book' when pay-direct is selected.",
+    "VERIFY (admin): Manually visit /admin?section=discovery-calls as admin to confirm purple 'Cohort · {name}' badges show under cohort names and the Source dropdown filters correctly (backend response is already correct per pytest)."
+  ],
+  "critical_code_review_comments": [
+    "CoachingPage.jsx still contains the legacy 'purchase session / unlock coaching' modal trigger that intercepts the Book Now click for free-trial users — must be removed per spec point #5.",
+    "DiscoveryCallsSection.jsx merge logic and testids are correctly added; backend is in good shape.",
+    "Backend admin merge endpoint correctly maps cohort statuses (scheduled→accepted, cancelled→rejected) and exposes source/cohort_name/cohort_slug as required."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_discovery_merge_and_payments.py (new)"
+  ],
+  "success_rate": {"backend": "100% (8/8)", "frontend": "33% (1 of 3 P0 features verified — unblur OK; direct-pay BROKEN; admin badge UNVERIFIED)"},
+  "test_credentials": "Used POST /api/auth/mock-login?user_type=admin / subscription / free_trial. Same credentials as iteration_65.",
+  "seed_data_creation": "None. Reused existing 14 cohort_discovery_calls in dev DB.",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "Backend admin discovery-calls merge endpoint is solid (8/8 pytest). The remaining P0 work is purely frontend: CoachingPage.jsx must remove the legacy 'Coaching Access Required' gate so Book Now opens the slot picker for everyone, and the pay-direct-radio + pay-with-credit-radio must render after a slot is picked. Once fixed, re-run a Playwright flow that: logs in as free_trial → /dashboard/coaching → clicks first mentor's Book Now → asserts dialog opens → picks a date+slot+session-type → asserts both radios visible → selects pay-direct → asserts confirm button text contains 'Pay ₹'. Also a separate admin run that asserts data-testid='discovery-source-filter' is visible and at least one [data-testid^='cohort-badge-'] is rendered.",
+  "rca of the issue": "Free-trial Book Now flow: spec required removing the old 'purchase session / unlock' detour modal so all candidates land on the slot picker and choose between credit vs direct-pay. The detour is still in CoachingPage.jsx — likely a leftover conditional in handleMentorClick or the mentor-card onClick that gates by has_coaching_plan / credits > 0. Need to delete that branch and always open the slot-picker."
+}

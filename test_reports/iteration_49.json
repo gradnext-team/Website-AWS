@@ -1,0 +1,93 @@
+{
+  "summary": "Completed testing of Subscription Fixes and Admin Debug Endpoints. Backend: 16/16 tests pass (100%). All features verified: coupon_code parameter in subscription creation, admin debug endpoints (user-plan, mentor-sessions), admin fix endpoints (fix-subscription, fix-mentor-bookings), plan label mapping, feedback strategy call exclusion.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_subscription_fixes.py",
+    "/app/test_reports/pytest/subscription_fixes_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Subscription creation with coupon_code uses Razorpay addons feature for first payment discount - coupon discount is applied as negative addon",
+    "Webhook activation now sets both 'features' AND 'plan_features' fields for proper access control (line 2264 in subscriptions.py)",
+    "Strategy call exclusion uses session_type filter with {'$nin': ['Strategy Call', 'strategy_call', 'Strategy call']} in feedback.py line 67",
+    "Admin debug/user-plan endpoint shows comprehensive plan diagnosis including has_subscription_by_plan and has_subscription_by_features checks",
+    "Plan label mapping in DashboardLayout.jsx includes basic_plan and pro_plan keys mapping to 'Basic' and 'Pro' respectively (lines 308-322)",
+    "Fix-subscription endpoint sets both features and plan_features fields (line 7148 in admin.py)"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_subscription_fixes.py - Created comprehensive test suite for subscription fixes and admin debug endpoints"
+  ],
+  "success_rate": {
+    "backend": "100% (16/16 tests passed)",
+    "frontend": "100% - Plan labels verified on pricing page (Basic Plan, Pro Plan, Pro+)"
+  },
+  "test_credentials": {
+    "mock_login": "POST /api/auth/mock-login?user_type=admin|candidate|mentor"
+  },
+  "seed_data_creation": "None - tests use existing system data",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Subscription fixes fully tested. Key endpoints: POST /api/subscriptions/create (accepts coupon_code), GET /api/admin/debug/user-plan/{email}, GET /api/admin/debug/mentor-sessions/{email}, POST /api/admin/fix-subscription, POST /api/admin/fix-mentor-bookings/{email}. All admin endpoints require admin auth via mock-login. Feedback pending-mandatory endpoint excludes strategy calls.",
+  "features_verified": {
+    "subscription_with_coupon": {
+      "endpoint": "POST /api/subscriptions/create",
+      "parameters": ["plan_key", "billing_cycle", "coupon_code (optional)"],
+      "status": "WORKING - coupon_code parameter accepted, discount applied via Razorpay addons"
+    },
+    "admin_debug_user_plan": {
+      "endpoint": "GET /api/admin/debug/user-plan/{email}",
+      "response_fields": ["current_plan_data", "subscription_object", "features_field", "plan_features_field", "access_check_results", "diagnosis"],
+      "status": "WORKING - returns comprehensive plan diagnosis"
+    },
+    "admin_debug_mentor_sessions": {
+      "endpoint": "GET /api/admin/debug/mentor-sessions/{email}",
+      "response_fields": ["mentor_record", "user_record", "id_match", "bookings_by_mentor_id", "potential_issues"],
+      "status": "WORKING - identifies mentor_id mismatches"
+    },
+    "admin_fix_subscription": {
+      "endpoint": "POST /api/admin/fix-subscription",
+      "parameters": ["user_email", "plan_key", "billing_cycle"],
+      "status": "WORKING - validates user and plan exist, sets both features and plan_features"
+    },
+    "admin_fix_mentor_bookings": {
+      "endpoint": "POST /api/admin/fix-mentor-bookings/{email}",
+      "status": "WORKING - requires admin auth, validates mentor exists"
+    },
+    "feedback_strategy_call_exclusion": {
+      "endpoint": "GET /api/feedback/pending-mandatory",
+      "status": "WORKING - excludes strategy calls from mandatory feedback query"
+    },
+    "plan_label_mapping": {
+      "basic_plan": "Displays as 'Basic Plan' on pricing page",
+      "pro_plan": "Displays as 'Pro Plan' on pricing page",
+      "pro_plus": "Displays as 'Pro+' on pricing page",
+      "status": "WORKING - all plan labels display correctly"
+    }
+  },
+  "test_scenarios_covered": [
+    "Subscription create accepts coupon_code parameter",
+    "Subscription create works without coupon_code",
+    "Debug user-plan returns plan diagnosis data",
+    "Debug user-plan requires admin authentication",
+    "Debug user-plan returns 404 for non-existent user",
+    "Debug mentor-sessions returns session analysis data",
+    "Debug mentor-sessions requires admin authentication",
+    "Fix subscription requires admin authentication",
+    "Fix subscription validates user exists (404 for non-existent)",
+    "Fix subscription validates plan exists (404 for non-existent)",
+    "Fix mentor bookings requires admin authentication",
+    "Pending mandatory feedback endpoint accessible for mentors",
+    "Pending feedback excludes strategy calls",
+    "Dashboard summary returns correct plan key",
+    "Subscription plans have correct plan_key values",
+    "Access control includes basic_plan and pro_plan in subscription list"
+  ]
+}

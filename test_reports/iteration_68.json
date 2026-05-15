@@ -1,0 +1,47 @@
+{
+  "summary": "Iteration 68 verification of 3 user-reported follow-ups: (1) cohort discovery modal unified to multi-step DiscoveryCallModal, (2) cohort apply 2-step flow with coupon + breakdown, (3) a-la-carte coupon UI + backend coupon_discount_id support. Backend: 10/10 new tests PASS (test_iter68_cohort_coupon_alacarte.py) + 8/8 regression PASS (test_discovery_merge_and_payments.py). Frontend cohort flow fully verified live: discovery modal shows 1/5 progress + 'Your Name'/'Current Location'/'Email' (not the simplified 5-field form). Order summary modal renders breakdown ₹25,000 + GST ₹4,500 = ₹29,500. COHORT20 → -₹5,000 → Total ₹23,600 with button label 'Complete payment · ₹23,600'. Remove restores ₹29,500. Invalid coupon shows inline error. NOTE: A-la-carte coupon UI was NOT live-verified in browser due to mentor-availability seed-data gap (same blocker called out in iteration_67) — code-level review + backend coupon_discount_id schema acceptance verified.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "A-la-carte direct-pay coupon UI live verification",
+        "issue": "Could not exercise pay-direct-radio panel in browser because all 26 mentors return 'No availability'. Code-review + backend regression test confirms coupon_discount_id field is accepted and create-session-order-with-slot does not 422/500. Same seed-data limitation as iter_67.",
+        "affected_selectors": ["alacarte-coupon-input", "alacarte-coupon-apply", "pay-direct-radio"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter68_cohort_coupon_alacarte.py",
+    "/app/backend/tests/test_discovery_merge_and_payments.py",
+    "/app/test_reports/pytest/iter68.xml",
+    "/app/test_reports/pytest/iter68_regression.xml"
+  ],
+  "action_items": [
+    "(Optional but recurring) Seed mentor availability for at least one mentor in dev so future testing agents can E2E-verify the a-la-carte coupon flow including [data-testid=alacarte-coupon-input], [data-testid=alacarte-coupon-apply], and the live 'Pay ₹X & Book' button label."
+  ],
+  "critical_code_review_comments": [
+    "FIX APPLIED: routes/discovery_calls.py admin GET /bookings was raising TypeError 'can't compare offset-naive and offset-aware datetimes' when sorting the merged list because new discovery_call_bookings have naive created_at while normalised cohort entries (parsed from ISO requested_at with +00:00) are tz-aware. Fixed by normalising the sort key to naive UTC. Without this fix the entire admin discovery-calls section breaks the moment any cohort-tagged booking lands via the new /api/discovery-calls/book endpoint.",
+    "Cohort.jsx ApplyDialog: 2-step form→summary flow, breakdown math, coupon apply/remove and inline-error rendering all verified live in browser. Razorpay-open is the validated end of payment flow; signature verification not testable.",
+    "discovery_calls.py /book correctly persists cohort_id, cohort_slug, source='cohort' on the booking record. Verified via admin merge GET that the new booking surfaces with source='cohort' and matching cohort_slug.",
+    "cohorts.py /enrol/create-order coupon math verified: base 25000 with COHORT20 (20% off) → discount 5000, subtotal 20000, GST 3600, total 23600. Invalid coupon returns 400."
+  ],
+  "updated_files": [
+    "/app/backend/routes/discovery_calls.py (sort-key normalisation in admin GET /bookings)",
+    "/app/backend/tests/test_iter68_cohort_coupon_alacarte.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 new + 8/8 regression after the sort-key fix)",
+    "frontend": "100% of cohort flows verified live (discovery modal unification + 2-step apply + coupon + breakdown + remove + invalid). A-la-carte UI not live-verified due to mentor seed gap; backend schema + regression PASS."
+  },
+  "test_credentials": "POST /api/auth/mock-login?user_type=admin / subscription / free_trial. COHORT20 coupon already in DB (applies_to=['cohort'], 20% off).",
+  "seed_data_creation": "Only test inserts: discovery_call_bookings with TEST_iter68_*@example.com emails (cohort + coaching tagged) and one cohort_discovery_calls record. Safe to leave or filter by TEST_ prefix.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Admin GET /api/admin/discovery-calls/bookings sort-key was fixed mid-iteration (naive vs aware datetime comparison). If you see 500s on this endpoint after inserting any new booking via /api/discovery-calls/book with cohort tagging, it indicates the fix at routes/discovery_calls.py near line 876 was reverted. The mentor-availability seed gap continues to block live verification of any /dashboard/coaching booking-dialog → payment-radio flow; supply seed availability or test directly via the create-session-order-with-slot API.",
+  "rca of the issue": "Admin merge endpoint regression: Before iter68, only `cohort_discovery_calls` produced tz-aware datetimes; `discovery_call_bookings.created_at` (naive UTC) was sorted within itself. Iter68 added cohort-tagged bookings into `discovery_call_bookings` AND kept legacy parallel writes in `cohort_discovery_calls`, so the merged list contained mixed naive+aware datetimes. Python's datetime sort raises TypeError for cross-aware/naive comparisons. Mitigation applied: normalise the sort key to naive UTC inside the admin endpoint."
+}

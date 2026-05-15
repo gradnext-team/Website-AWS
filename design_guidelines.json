@@ -1,0 +1,138 @@
+{
+  "project_name": "GradNext Coach Availability",
+  "design_philosophy": {
+    "identity": "E1 - The Anti-AI Designer",
+    "core_principles": [
+      "Fusion over Imitation: Mix Executive Polish with Swiss Precision",
+      "Emotion First: Trust, Competence, and Availability",
+      "Content is King: The Coach is the Product",
+      "Negative Space: Luxury = Space",
+      "Contrast: Rhino Navy (#2E3558) vs. Stark White"
+    ]
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Plus Jakarta Sans, sans-serif",
+      "weights": ["600", "700", "800"],
+      "usage": "H1 for Coach Name, H2 for Section Headers"
+    },
+    "body": {
+      "font_family": "Inter, sans-serif",
+      "weights": ["400", "500"],
+      "usage": "Bio, Time Slots, Metadata"
+    }
+  },
+  "colors": {
+    "brand": {
+      "rhino": "#2E3558",
+      "rhino_dark": "#2E356C",
+      "periwinkle": "#8C9DFF",
+      "periwinkle_light": "#DEE3FF",
+      "chrome_yellow": "#FFA601",
+      "grey_dark": "#323232",
+      "grey_light": "#EAEAEA",
+      "white": "#FFFFFF"
+    },
+    "semantic": {
+      "background": "#FFFFFF",
+      "surface_dark": "#2E3558",
+      "surface_light": "#F8FAFC",
+      "text_primary": "#2E3558",
+      "text_secondary": "#64748B",
+      "accent": "#8C9DFF"
+    }
+  },
+  "layout_strategy": {
+    "type": "Hybrid Split",
+    "hero": {
+      "style": "Dark Immersive",
+      "background": "bg-[#2E3558] (Rhino)",
+      "text_color": "text-white",
+      "structure": "Centered or Split based on viewport. Mobile: Stacked."
+    },
+    "grid_system": {
+      "mode": "Mode B (High Density) for Availability",
+      "columns": "grid-cols-1 md:grid-cols-3 lg:grid-cols-5",
+      "gap": "gap-4"
+    },
+    "spacing": {
+      "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "section_vertical": "py-12 md:py-20"
+    }
+  },
+  "components": {
+    "CoachProfilePage": {
+      "path": "/app/frontend/src/pages/CoachProfilePage.js",
+      "structure": [
+        "Navbar (Logo Only)",
+        "HeroSection (Dark Theme)",
+        "AvailabilitySection (Light Theme)",
+        "Footer"
+      ]
+    },
+    "HeroSection": {
+      "elements": [
+        {
+          "name": "Avatar",
+          "style": "w-32 h-32 md:w-48 md:h-48 border-4 border-white/10 shadow-xl rounded-full object-cover"
+        },
+        {
+          "name": "Name",
+          "style": "text-4xl md:text-5xl font-bold tracking-tight text-white mb-2"
+        },
+        {
+          "name": "RoleCompany",
+          "style": "text-xl text-periwinkle font-medium flex items-center gap-2"
+        },
+        {
+          "name": "Headline",
+          "style": "text-lg text-gray-300 max-w-2xl mt-4 leading-relaxed"
+        },
+        {
+          "name": "Tags",
+          "style": "flex flex-wrap gap-2 mt-6",
+          "component": "Badge (variant: secondary/outline-light)"
+        }
+      ]
+    },
+    "AvailabilityGrid": {
+      "container": "bg-white rounded-3xl shadow-sm border border-gray-100 p-8 -mt-10 relative z-10 mx-4 md:mx-auto max-w-6xl",
+      "header": "Flex justify-between items-center mb-8",
+      "grid": "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
+      "slot_card": {
+        "style": "border border-gray-100 rounded-xl p-4 hover:border-periwinkle transition-colors cursor-default bg-slate-50",
+        "active_style": "bg-white shadow-sm border-periwinkle/50",
+        "time_text": "text-lg font-semibold text-rhino",
+        "date_text": "text-sm text-gray-500 uppercase tracking-wider"
+      }
+    }
+  },
+  "image_assets": {
+    "coach_placeholders": [
+      {
+        "url": "https://images.unsplash.com/photo-1689600944138-da3b150d9cb8?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Professional Woman Portrait",
+        "category": "female_coach"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1576558656222-ba66febe3dec?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Professional Man Portrait",
+        "category": "male_coach"
+      }
+    ]
+  },
+  "universal_guidelines": {
+    "anti_ai_rules": [
+      "Do not use gradients for the main background. Use solid #2E3558.",
+      "Do not center align large blocks of text. Left align for readability.",
+      "Use 3x more padding than you think is necessary.",
+      "Use 'sonner' for toasts.",
+      "No 'robot' or 'brain' emojis."
+    ],
+    "accessibility": {
+      "contrast": "Ensure white text on Rhino background has sufficient opacity (min 0.9).",
+      "interactive": "All slots must have hover states even if view-only."
+    }
+  },
+  "instructions_to_main_agent": "1. Create the page at '/coach/:slug'. 2. Mock data for the coach if backend is not ready, but structure it to receive 'mentor' data. 3. Use the 'HeroSection' designs described above. 4. The availability grid should be the centerpiece - clean, distinct, and easy to read. 5. Ensure the page is responsive (stack on mobile)."
+}

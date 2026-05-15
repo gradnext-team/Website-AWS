@@ -1,0 +1,268 @@
+[
+  {
+    "id": "logo_3cd2323782ea",
+    "name": "Mckinsey & Company",
+    "logo_url": "/api/images/img_33080662aa95",
+    "category": "consulting",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:37:52.460689"
+  },
+  {
+    "id": "logo_95dcecf7fb02",
+    "name": "BCG",
+    "logo_url": "/api/images/img_8e9decb5ad9d",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:38:02.857259"
+  },
+  {
+    "id": "logo_370e0456e384",
+    "name": "Bain & Company",
+    "logo_url": "/api/images/img_eb3b5470e7f7",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:38:15.989402"
+  },
+  {
+    "id": "logo_d97a46828d31",
+    "name": "Arthur D. Little",
+    "logo_url": "/api/images/img_e6d07a12e7fa",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:38:32.605135"
+  },
+  {
+    "id": "logo_afc3414e0668",
+    "name": "Accenture Strategy",
+    "logo_url": "/api/images/img_2edc4a89d5f4",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:39:08.488812"
+  },
+  {
+    "id": "logo_b92fc837ac5e",
+    "name": "YCP",
+    "logo_url": "/api/images/img_4bf2ca3c0ef3",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:40:11.693248"
+  },
+  {
+    "id": "logo_98c5819dd6fb",
+    "name": "LBS",
+    "logo_url": "/api/images/img_526f325ce4c2",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:40:36.152750"
+  },
+  {
+    "id": "logo_9ec17e9195ce",
+    "name": "ISB",
+    "logo_url": "/api/images/img_9fb1019dbba0",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:40:48.949861"
+  },
+  {
+    "id": "logo_60476c7e1c1b",
+    "name": "IIM Calcutta",
+    "logo_url": "/api/images/img_032c4a4f8c8d",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:40:59.117317"
+  },
+  {
+    "id": "logo_3a9820b9235a",
+    "name": "HEC Paris",
+    "logo_url": "/api/images/img_a11872712294",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:41:12.319181"
+  },
+  {
+    "id": "logo_ef3eece67416",
+    "name": "Duke",
+    "logo_url": "data:image/png;base64,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",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:44:09.536916"
+  },
+  {
+    "id": "logo_6128592b0769",
+    "name": "Texas A&M",
+    "logo_url": "/api/images/img_4d84f8d524e6",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:45:46.390816"
+  },
+  {
+    "id": "logo_900c3c7ab7a8",
+    "name": "XLRI",
+    "logo_url": "/api/images/img_90fd7e67370e",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:56:56.548109"
+  },
+  {
+    "id": "logo_4d3ac561f1bc",
+    "name": "Christ University",
+    "logo_url": "/api/images/img_c0292d9ec903",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T21:57:44.574155"
+  },
+  {
+    "id": "logo_a3f64c4a3535",
+    "name": "EY Parthenon",
+    "logo_url": "/api/images/img_e3b3ec486779",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:03:18.782580"
+  },
+  {
+    "id": "logo_394a50dffc71",
+    "name": "LSE",
+    "logo_url": "/api/images/img_5cf730accc07",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:03:32.045079"
+  },
+  {
+    "id": "logo_4f2652964f95",
+    "name": "Smith",
+    "logo_url": "/api/images/img_0158152a1c07",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:03:46.870985"
+  },
+  {
+    "id": "logo_829c967de749",
+    "name": "Deecon",
+    "logo_url": "/api/images/img_f98db991abe9",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:04:14.829372"
+  },
+  {
+    "id": "logo_81410daf12c2",
+    "name": "IIM K",
+    "logo_url": "/api/images/img_e68d16f2bb96",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:04:27.745787"
+  },
+  {
+    "id": "logo_c5c894564f73",
+    "name": "FMS",
+    "logo_url": "/api/images/img_e5f8302ccdb5",
+    "category": "college",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:06:17.920327"
+  },
+  {
+    "id": "logo_b46bc215ad29",
+    "name": "Master Advisors",
+    "logo_url": "/api/images/img_b6200547f398",
+    "category": "consulting_firm",
+    "show_on_homepage": false,
+    "created_at": "2026-02-04T22:18:03.891368"
+  },
+  {
+    "id": "logo_79aa3142b78a",
+    "name": "Monitor Deloitte",
+    "logo_url": "data:image/png;base64,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",
+    "category": "consulting",
+    "show_on_homepage": false,
+    "created_at": "2026-02-05T06:45:13.048964"
+  },
+  {
+    "id": "logo_6e3452bb1bcc",
+    "name": "Oliver Wyman",
+    "logo_url": "",
+    "category": "consulting_firm"
+  },
+  {
+    "id": "logo_21430dbd960a",
+    "name": "Kearney",
+    "logo_url": "",
+    "category": "consulting_firm"
+  },
+  {
+    "id": "logo_ed6062569e86",
+    "name": "FSG",
+    "logo_url": "",
+    "category": "consulting_firm"
+  },
+  {
+    "id": "logo_1818e3fb660b",
+    "name": "Amazon",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_d2ee84a8b1d6",
+    "name": "Cisco",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_3de7c31b7138",
+    "name": "Dell",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_5e73328fd42d",
+    "name": "Lenovo",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_92b1f93cc271",
+    "name": "Spinny",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_5a754f5a347e",
+    "name": "Noon",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_b31deb207a1c",
+    "name": "Accenture",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_caeb7d42f6c3",
+    "name": "Blinkit",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_4f146222e97d",
+    "name": "Picus Capital",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_39e85307ab2f",
+    "name": "BCG Auctus Advisor",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_97d556ed17e1",
+    "name": "ANNY N Lodha Group",
+    "logo_url": "",
+    "category": "company"
+  },
+  {
+    "id": "logo_987d5391294f",
+    "name": "Acai Theory",
+    "logo_url": "",
+    "category": "company"
+  }
+]

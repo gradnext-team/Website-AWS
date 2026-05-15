@@ -1,0 +1,213 @@
+.App {
+  min-height: 100vh;
+}
+
+/* Logo */
+.logo-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+/* Consistent page hero backgrounds */
+.hero-gradient {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 30% 70%, rgba(8, 145, 178, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Feature grid consistency */
+.feature-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Consistent check icon styling */
+.check-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #0891b2;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+/* Price display */
+.price-display {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.price-currency {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* Section headers */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-header h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .section-header h2 {
+    font-size: 2.5rem;
+  }
+}
+
+.section-header p {
+  font-size: 1.125rem;
+  color: #64748b;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+/* CTA sections */
+.cta-section {
+  background: linear-gradient(135deg, #1e40af 0%, #0891b2 100%);
+  padding: 5rem 0;
+}
+
+.cta-section h2 {
+  color: white;
+}
+
+.cta-section p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark sections */
+.dark-section {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.dark-section h2,
+.dark-section h3,
+.dark-section h4 {
+  color: white;
+}
+
+.dark-section p {
+  color: #94a3b8;
+}
+
+/* FAQ styling */
+.faq-item {
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.faq-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Process steps */
+.process-step {
+  position: relative;
+}
+
+.process-step-number {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.process-step-connector {
+  position: absolute;
+  top: 2rem;
+  left: 100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #e2e8f0 0%, transparent 100%);
+}
+
+@media (max-width: 767px) {
+  .process-step-connector {
+    display: none;
+  }
+}
+/* Typing cursor blink animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+  font-weight: 400;
+}
+
+/* Hide scrollbar for testimonials carousel */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Logo Marquee Animation */
+.logo-marquee-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.logo-marquee {
+  animation: marquee 60s linear infinite;
+  width: max-content;
+}
+
+.logo-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

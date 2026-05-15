@@ -1,0 +1,94 @@
+{
+  "summary": "Subscription Plans Modal feature tested successfully. All requested features are working: Trial Expired banner with 'Upgrade' button (not 'Upgrade Before Expiry'), locked pages with lock icons, SubscriptionPlansModal with 3 plans (Basic, Pro, Pro+), 1 Month/6 Months billing toggle, savings percentage display, plan badges (Most Popular, Best Value), and Choose [Plan] buttons.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_36.json"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "SubscriptionPlansModal component correctly fetches plans from /api/resources/plans",
+    "Billing toggle correctly switches between one_month and six_month pricing",
+    "Savings percentage calculated and displayed for 6-month billing",
+    "Plan badges (Most Popular, Best Value) correctly assigned to Pro and Pro+ plans",
+    "showUpgradeModal function properly exposed via DashboardContext",
+    "Locked pages (Courses, Drills, Peer Practice, Coaching) show lock icons and trigger modal",
+    "Trial Expired banner shows 'Upgrade' button (not 'Upgrade Before Expiry') as requested"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - Frontend only testing",
+    "frontend": "100% - All features working correctly"
+  },
+  "test_credentials": {
+    "expired_trial_user": {
+      "email": "expired@gradnext.com",
+      "password": "test123"
+    },
+    "active_trial_user": {
+      "email": "freetrial@gradnext.com",
+      "password": "test123"
+    }
+  },
+  "seed_data_creation": "Used existing expired trial user (expired@gradnext.com) with trial_status.is_expired=true",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Subscription Plans Modal feature fully tested. Modal opens from: 1) Upgrade button in Trial Expired banner, 2) View Plans button in sidebar, 3) Navigating to locked pages (Courses, Drills, etc.). Plans API returns pricing.one_month and pricing.six_month fields. Toggle switches between monthly and 6-month billing with savings percentage displayed.",
+  "features_tested": {
+    "trial_expired_banner": {
+      "status": "VERIFIED",
+      "details": "Shows 'Trial Expired' with 'Upgrade' button (not 'Upgrade Before Expiry')"
+    },
+    "locked_pages_with_icons": {
+      "status": "VERIFIED",
+      "details": "Courses, Case Drills, Peer Practice, Coaching show lock icons in sidebar"
+    },
+    "subscription_plans_modal": {
+      "status": "VERIFIED",
+      "details": "Opens with 3 plans: Basic Plan (₹499/mo), Pro Plan (₹699/mo), Pro+ (₹1,299/mo)"
+    },
+    "billing_toggle": {
+      "status": "VERIFIED",
+      "details": "1 Month / 6 Months toggle at top of modal"
+    },
+    "pricing_switch": {
+      "status": "VERIFIED",
+      "details": "Toggle switches pricing: Basic ₹499→₹399, Pro ₹699→₹599, Pro+ ₹1,299→₹999"
+    },
+    "savings_percentage": {
+      "status": "VERIFIED",
+      "details": "6-month billing shows 'Save X% vs monthly' and 'Save up to 30%' badge"
+    },
+    "plan_features_list": {
+      "status": "VERIFIED",
+      "details": "Each plan shows correct features list with checkmarks"
+    },
+    "plan_badges": {
+      "status": "VERIFIED",
+      "details": "Pro Plan has 'Most Popular' badge, Pro+ has 'Best Value' badge"
+    },
+    "choose_plan_buttons": {
+      "status": "VERIFIED",
+      "details": "'Choose Basic Plan', 'Choose Pro Plan', 'Choose Pro+' buttons are clickable"
+    },
+    "view_plans_button": {
+      "status": "VERIFIED",
+      "details": "View Plans button in sidebar opens the same modal"
+    },
+    "locked_page_upgrade": {
+      "status": "VERIFIED",
+      "details": "Navigating to locked Courses page auto-opens the subscription modal"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs use real data from /api/resources/plans endpoint"
+  }
+}

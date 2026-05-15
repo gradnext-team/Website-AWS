@@ -1,0 +1,35 @@
+{
+  "summary": "End-to-end test of CRM dashboard updates: workflow rules CRUD, plans endpoint, overdue route ordering, won_plan fields, stage_changed_at stamping, sidebar Workflow + removed Call Logs, Leads table Plan column + kebab actions, Add Lead modal funnel/stage selectors, bulk move funnel button. Backend 13/13 pytest tests pass; UI verified via Playwright with admin mock session.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Leads page", "issues": ["Two 'Add Lead' buttons (header + empty-state) share the same accessible name. Not a bug but consider distinct data-testid (e.g., add-lead-header-btn vs add-lead-empty-btn) so tests don't hit strict-mode violations."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_crm_workflow_plans.py",
+    "/app/test_reports/pytest/crm_workflow_plans.xml"
+  ],
+  "action_items": [
+    "Optional: add distinct data-testid for the two 'Add Lead' buttons on the Leads page.",
+    "Optional: ensure /api/crm/leads/{id} DELETE returns success for admin (used during cleanup; verified working via UI test).",
+    "Confirmed working — no fixes required from main agent for the described features."
+  ],
+  "critical_code_review_comments": [
+    "CRMDashboard.jsx is now 2256 lines — strongly consider splitting LeadsSection, WorkflowSection, WonPlanModal, BulkMoveFunnelModal into separate files for maintainability (>700-line guideline).",
+    "Route ordering for /api/crm/leads/overdue is correct (defined before /leads/{lead_id}); 200 returned, not 404.",
+    "workflow-rules create/update validates funnel + stage and rejects days_threshold < 1 as expected.",
+    "Lead stage change correctly stamps stage_changed_at (verified via PUT then GET).",
+    "won_plan_key / won_plan_name / won_amount persist on PUT and surface in GET response."
+  ],
+  "updated_files": ["/app/backend/tests/test_crm_workflow_plans.py"],
+  "success_rate": {"backend": "100% (13/13)", "frontend": "100% (all selectors found, flows verified)"},
+  "test_credentials": "Admin via POST /api/auth/mock-login?user_type=admin (sets session cookie). User: admin@gradnext.co (mock-admin-1).",
+  "seed_data_creation": "Created+deleted ephemeral TEST_ leads, TEST_ workflow rules; no residual seed data left in DB.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "test_crm_workflow_plans.py covers all backend endpoints listed in the request. Run with: REACT_APP_BACKEND_URL=<preview-url> pytest backend/tests/test_crm_workflow_plans.py -v. Frontend Playwright snippet in iteration thought verified sidebar nav (Workflow added, Call Logs removed), Leads table Plan column + kebab actions menu (data-testid pattern: lead-actions-trigger-{id} / lead-actions-menu-{id} / action-view/won/lost/delete-{id}), AddLead funnel+stage selects (add-lead-funnel-select / add-lead-stage-select), Workflow form (workflow-rule-name/funnel/stage/days/description/save-btn), and bulk-move-funnel-btn appears on selection. Overdue banner conditional on overdueData.count > 0 (data-testid='overdue-banner' / 'overdue-toggle').",
+  "rca of the issue": "N/A — no defects found."
+}

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Display Options - Mockups</title>
+    <style>
+        :root {
+            --gn-rhino: #2E3558;
+            --gn-periwinkle: #8B9FE8;
+            --gn-periwinkle-light: #A8B7F0;
+            --gn-periwinkle-lighter: #DEE3FF;
+            --gn-chrome-yellow: #FFC700;
+            --gn-chrome-lighter: #FFE6B7;
+            --gn-grey: #6B7280;
+            --gn-grey-light: #D1D5DB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            padding: 40px 20px;
+            color: var(--gn-rhino);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--gn-rhino);
+            font-size: 36px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--gn-grey);
+            margin-bottom: 50px;
+            font-size: 18px;
+        }
+
+        .option-wrapper {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gn-periwinkle-lighter);
+        }
+
+        .option-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gn-chrome-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--gn-rhino);
+        }
+
+        .option-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gn-rhino);
+        }
+
+        .option-description {
+            color: var(--gn-grey);
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: var(--gn-periwinkle-lighter);
+            border-radius: 8px;
+        }
+
+        /* Option 1: Featured Workshop Card */
+        .featured-workshop {
+            position: relative;
+            height: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .featured-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .featured-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gn-chrome-yellow);
+            color: var(--gn-rhino);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gn-rhino);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .featured-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .featured-description {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            margin-bottom: 16px;
+            max-width: 600px;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 24px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .featured-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .featured-button {
+            background: white;
+            color: var(--gn-rhino);
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            width: fit-content;
+            font-size: 16px;
+        }
+
+        .countdown-box {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .countdown-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .countdown-numbers {
+            display: flex;
+            gap: 12px;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .countdown-unit {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        /* Option 2: Horizontal Scrollable Cards */
+        .scroll-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+
+        .workshop-card {
+            flex: 0 0 320px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .workshop-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #10B981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+            margin-bottom: 8px;
+        }
+
+        .card-instructor {
+            font-size: 13px;
+            color: var(--gn-grey);
+            margin-bottom: 12px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--gn-grey);
+            margin-bottom: 12px;
+        }
+
+        .card-button {
+            width: 100%;
+            background: var(--gn-rhino);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Option 3: Integration with Upcoming Sessions */
+        .sessions-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .sessions-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #F9FAFB;
+            transition: background 0.2s;
+        }
+
+        .session-item:hover {
+            background: var(--gn-periwinkle-lighter);
+        }
+
+        .session-date {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+
+        .session-day {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gn-rhino);
+        }
+
+        .session-month {
+            font-size: 11px;
+            color: var(--gn-grey);
+            text-transform: uppercase;
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .badge-workshop {
+            background: var(--gn-chrome-lighter);
+            color: var(--gn-rhino);
+        }
+
+        .badge-coaching {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .badge-peer {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .session-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+            margin-bottom: 4px;
+        }
+
+        .session-time {
+            font-size: 12px;
+            color: var(--gn-grey);
+        }
+
+        .session-action {
+            padding: 8px 16px;
+            background: var(--gn-rhino);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Option 4: Compact Timeline */
+        .timeline-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+        }
+
+        .view-all-link {
+            color: var(--gn-periwinkle);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            padding: 16px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-date {
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .timeline-date-day {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+        }
+
+        .timeline-date-time {
+            font-size: 12px;
+            color: var(--gn-grey);
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-workshop-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+            margin-bottom: 4px;
+        }
+
+        .timeline-instructor {
+            font-size: 12px;
+            color: var(--gn-grey);
+        }
+
+        .timeline-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: #10B981;
+            font-weight: 600;
+        }
+
+        /* Option 5: Dashboard Widget Grid */
+        .widget-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gn-rhino);
+        }
+
+        .widget-count {
+            background: var(--gn-chrome-yellow);
+            color: var(--gn-rhino);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .widget-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .widget-next-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .widget-workshop-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .widget-workshop-meta {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .widget-cta {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 2px solid var(--gn-periwinkle);
+            color: var(--gn-periwinkle);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .widget-cta:hover {
+            background: var(--gn-periwinkle);
+            color: white;
+        }
+
+        .comparison-note {
+            background: #FEF3C7;
+            border-left: 4px solid var(--gn-chrome-yellow);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .comparison-note strong {
+            color: var(--gn-rhino);
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Workshop Display Options</h1>
+        <p class="subtitle">Choose the best design for your dashboard</p>
+
+        <!-- Option 1 -->
+        <div class="option-wrapper">
+            <div class="option-header">
+                <div class="option-number">1</div>
+                <div class="option-title">Featured Workshop Card (Hero Style)</div>
+            </div>
+            <div class="option-description">
+                ✨ High visibility with large hero card • Drives registrations • Visually stunning with countdown timer
+            </div>
+            <div class="featured-workshop">
+                <div class="featured-overlay">
+                    <div class="featured-badge">
+                        <div class="pulse-dot"></div>
+                        Next Workshop
+                    </div>
+                    <h2 class="featured-title">Market Sizing & Estimation Masterclass</h2>
+                    <p class="featured-description">Learn advanced frameworks and techniques to tackle market sizing questions in consulting case interviews</p>
+                    <div class="featured-meta">
+                        <span>👤 Sarah Johnson • Senior Partner, McKinsey</span>
+                        <span>📅 Feb 15, 2026</span>
+                        <span>🕐 6:00 PM IST</span>
+                    </div>
+                    <button class="featured-button">Register Now →</button>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-label">Starts in</div>
+                    <div class="countdown-numbers">
+                        <div class="countdown-item">
+                            <div class="countdown-value">5</div>
+                            <div class="countdown-unit">Days</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">14</div>
+                            <div class="countdown-unit">Hours</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">23</div>
+                            <div class="countdown-unit">Mins</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="option-wrapper">
+            <div class="option-header">
+                <div class="option-number">2</div>
+                <div class="option-title">Horizontal Scrollable Cards</div>
+            </div>
+            <div class="option-description">
+                📱 Mobile-friendly carousel • Shows multiple workshops • Quick registration • Space-efficient
+            </div>
+            <div class="scroll-container">
+                <div class="workshop-card">
+                    <div class="card-image">
+                        <div class="card-badge">Registered ✓</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Market Sizing Masterclass</h3>
+                        <p class="card-instructor">Sarah Johnson • McKinsey Partner</p>
+                        <div class="card-meta">
+                            <span>Feb 15 • 6:00 PM</span>
+                        </div>
+                        <button class="card-button">View Details</button>
+                    </div>
+                </div>
+                <div class="workshop-card">
+                    <div class="card-image"></div>
+                    <div class="card-content">
+                        <h3 class="card-title">Behavioral Interview Prep</h3>
+                        <p class="card-instructor">Michael Chen • BCG Principal</p>
+                        <div class="card-meta">
+                            <span>Feb 18 • 7:00 PM</span>
+                        </div>
+                        <button class="card-button">Register Now</button>
+                    </div>
+                </div>
+                <div class="workshop-card">
+                    <div class="card-image"></div>
+                    <div class="card-content">
+                        <h3 class="card-title">Case Structuring Framework</h3>
+                        <p class="card-instructor">Emily Davis • Bain Manager</p>
+                        <div class="card-meta">
+                            <span>Feb 20 • 5:30 PM</span>
+                        </div>
+                        <button class="card-button">Register Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 3 -->
+        <div class="option-wrapper">
+            <div class="option-header">
+                <div class="option-number">3</div>
+                <div class="option-title">Integration with Upcoming Sessions</div>
+            </div>
+            <div class="option-description">
+                📅 Unified view of all activities • Color-coded by type • Most space-efficient • Clean integration
+            </div>
+            <div class="sessions-card">
+                <div class="sessions-header">
+                    📆 Upcoming Sessions
+                </div>
+                <div class="session-item">
+                    <div class="session-date">
+                        <div class="session-day">15</div>
+                        <div class="session-month">FEB</div>
+                    </div>
+                    <div class="session-info">
+                        <span class="session-type-badge badge-workshop">WORKSHOP</span>
+                        <div class="session-title">Market Sizing Masterclass</div>
+                        <div class="session-time">6:00 PM IST • Sarah Johnson</div>
+                    </div>
+                    <button class="session-action">Register</button>
+                </div>
+                <div class="session-item">
+                    <div class="session-date">
+                        <div class="session-day">16</div>
+                        <div class="session-month">FEB</div>
+                    </div>
+                    <div class="session-info">
+                        <span class="session-type-badge badge-coaching">COACHING</span>
+                        <div class="session-title">1-on-1 Case Practice</div>
+                        <div class="session-time">4:00 PM IST • Mentor: Raj Kumar</div>
+                    </div>
+                    <button class="session-action">Join</button>
+                </div>
+                <div class="session-item">
+                    <div class="session-date">
+                        <div class="session-day">18</div>
+                        <div class="session-month">FEB</div>
+                    </div>
+                    <div class="session-info">
+                        <span class="session-type-badge badge-workshop">WORKSHOP</span>
+                        <div class="session-title">Behavioral Interview Prep</div>
+                        <div class="session-time">7:00 PM IST • Michael Chen</div>
+                    </div>
+                    <button class="session-action">Register</button>
+                </div>
+                <div class="session-item">
+                    <div class="session-date">
+                        <div class="session-day">19</div>
+                        <div class="session-month">FEB</div>
+                    </div>
+                    <div class="session-info">
+                        <span class="session-type-badge badge-peer">PEER PRACTICE</span>
+                        <div class="session-title">Mock Interview with Priya S.</div>
+                        <div class="session-time">3:30 PM IST • Case Practice</div>
+                    </div>
+                    <button class="session-action">Join</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 4 -->
+        <div class="option-wrapper">
+            <div class="option-header">
+                <div class="option-number">4</div>
+                <div class="option-title">Compact Timeline View</div>
+            </div>
+            <div class="option-description">
+                📊 Clean, scannable list • Minimal design • Shows next 3-5 workshops • Registration status visible
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-header">
+                    <div class="timeline-title">📅 Upcoming Workshops</div>
+                    <a href="#" class="view-all-link">View All →</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <div class="timeline-date-day">Feb 15, 2026</div>
+                        <div class="timeline-date-time">6:00 PM IST</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-workshop-title">Market Sizing & Estimation Masterclass</div>
+                        <div class="timeline-instructor">Sarah Johnson • Senior Partner, McKinsey</div>
+                    </div>
+                    <div class="timeline-status">
+                        <div class="status-dot"></div>
+                        <div class="status-text">Registered</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <div class="timeline-date-day">Feb 18, 2026</div>
+                        <div class="timeline-date-time">7:00 PM IST</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-workshop-title">Behavioral Interview Preparation</div>
+                        <div class="timeline-instructor">Michael Chen • Principal, BCG</div>
+                    </div>
+                    <div class="timeline-status">
+                        <button style="padding: 6px 16px; background: var(--gn-rhino); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Register</button>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <div class="timeline-date-day">Feb 20, 2026</div>
+                        <div class="timeline-date-time">5:30 PM IST</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-workshop-title">Case Structuring Framework Deep Dive</div>
+                        <div class="timeline-instructor">Emily Davis • Manager, Bain & Company</div>
+                    </div>
+                    <div class="timeline-status">
+                        <button style="padding: 6px 16px; background: var(--gn-rhino); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Register</button>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">
+                        <div class="timeline-date-day">Feb 22, 2026</div>
+                        <div class="timeline-date-time">6:30 PM IST</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-workshop-title">Financial Analysis for Consultants</div>
+                        <div class="timeline-instructor">Alex Kumar • Ex-Partner, Deloitte</div>
+                    </div>
+                    <div class="timeline-status">
+                        <button style="padding: 6px 16px; background: var(--gn-rhino); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 5 -->
+        <div class="option-wrapper">
+            <div class="option-header">
+                <div class="option-number">5</div>
+                <div class="option-title">Dashboard Widget Card</div>
+            </div>
+            <div class="option-description">
+                🎯 Matches existing dashboard style • Clean and consistent • Next workshop preview • CTA to view all
+            </div>
+            <div style="max-width: 400px;">
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <div class="widget-title">🎓 Upcoming Workshops</div>
+                        <div class="widget-count">3</div>
+                    </div>
+                    <div class="widget-preview">
+                        <div class="widget-next-label">Next Workshop</div>
+                        <div class="widget-workshop-title">Market Sizing Masterclass</div>
+                        <div class="widget-workshop-meta">
+                            <span>📅 Feb 15</span>
+                            <span>🕐 6:00 PM</span>
+                        </div>
+                    </div>
+                    <button class="widget-cta">View All Workshops →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Note -->
+        <div class="comparison-note">
+            <strong>💡 Recommendation:</strong>
+            <p><strong>Option 1 (Featured Hero)</strong> - Best for driving registrations, high visual impact, creates urgency with countdown</p>
+            <p><strong>Option 5 (Widget Card)</strong> - Best for clean integration, matches current design, less intrusive</p>
+            <p><strong>Option 3 (Unified Sessions)</strong> - Best for space efficiency, shows all upcoming activities together</p>
+        </div>
+    </div>
+</body>
+</html>

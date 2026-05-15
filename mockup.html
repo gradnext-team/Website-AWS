@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header User Display Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8f9fa;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2e3558;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+        
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .mockup-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 24px rgba(46, 53, 88, 0.08);
+        }
+        
+        .mockup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e3558;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f1f5;
+        }
+        
+        .mockup-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        /* Header mockup styles */
+        .header-mockup {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 24px rgba(46, 53, 88, 0.08);
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e3558;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+        
+        /* Option 1: Dropdown */
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .user-dropdown:hover {
+            background: rgba(240, 241, 245, 0.8);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b92ff 0%, #2e3558 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2e3558;
+        }
+        
+        .chevron {
+            width: 16px;
+            height: 16px;
+            color: #64748b;
+        }
+        
+        /* Option 2: Badge */
+        .user-with-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .user-with-badge:hover {
+            background: rgba(240, 241, 245, 0.8);
+        }
+        
+        .plan-badge {
+            background: #ffd93d;
+            color: #2e3558;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Option 3: Simple */
+        .user-simple {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .user-simple:hover {
+            background: rgba(240, 241, 245, 0.8);
+        }
+        
+        /* Option 4: Avatar only */
+        .user-avatar-only {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .user-avatar-only:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .tooltip {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: #2e3558;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-4px);
+            transition: all 0.2s;
+            box-shadow: 0 8px 24px rgba(46, 53, 88, 0.2);
+        }
+        
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+            background: #2e3558;
+            transform: rotate(45deg);
+        }
+        
+        .tooltip-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .tooltip-plan {
+            font-size: 12px;
+            color: #ffd93d;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            margin-left: 12px;
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(240, 241, 245, 0.8);
+        }
+        
+        /* Dropdown menu for option 1 */
+        .dropdown-menu {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 8px 32px rgba(46, 53, 88, 0.15);
+            min-width: 200px;
+            border: 1px solid rgba(240, 241, 245, 0.8);
+        }
+        
+        .dropdown-item {
+            padding: 10px 12px;
+            color: #2e3558;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(139, 146, 255, 0.1);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #f0f1f5;
+            margin: 4px 0;
+        }
+        
+        .dropdown-label {
+            font-size: 12px;
+            color: #94a3b8;
+            padding: 8px 12px 4px;
+            font-weight: 500;
+        }
+        
+        .option-1-wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Header User Display - 4 Options</h1>
+        
+        <div class="mockup-grid">
+            <!-- Option 1 -->
+            <div class="mockup-card">
+                <div class="mockup-title">Option 1: Name with Dropdown</div>
+                <div class="mockup-description">
+                    Shows the user's name with a chevron icon. Click opens a dropdown menu with role info, dashboard link, and logout.
+                </div>
+                <div class="header-mockup">
+                    <div class="logo">gradnext</div>
+                    <div class="nav-links">
+                        <span class="nav-link">Home</span>
+                        <span class="nav-link">Subscription</span>
+                        <span class="nav-link">Coaching</span>
+                        <span class="nav-link">Pricing</span>
+                    </div>
+                    <div class="option-1-wrapper">
+                        <div class="user-dropdown">
+                            <div class="user-avatar">JD</div>
+                            <span class="user-name">John Doe</span>
+                            <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu" style="display: none;">
+                            <div class="dropdown-label">ROLE</div>
+                            <div class="dropdown-item">
+                                <span>Pinnacle User</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item">
+                                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                Dashboard
+                            </div>
+                            <div class="dropdown-item">
+                                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                Logout
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; font-size: 13px; color: #64748b;">
+                    ✅ Clean and professional<br>
+                    ✅ Hides role info until needed<br>
+                    ✅ Clear action menu
+                </div>
+            </div>
+            
+            <!-- Option 2 -->
+            <div class="mockup-card">
+                <div class="mockup-title">Option 2: Name with Plan Badge</div>
+                <div class="mockup-description">
+                    Displays user's name with their plan (Pinnacle, Pro, etc.) as a colorful badge. Role is hidden.
+                </div>
+                <div class="header-mockup">
+                    <div class="logo">gradnext</div>
+                    <div class="nav-links">
+                        <span class="nav-link">Home</span>
+                        <span class="nav-link">Subscription</span>
+                        <span class="nav-link">Coaching</span>
+                        <span class="nav-link">Pricing</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-with-badge">
+                            <div class="user-avatar">JD</div>
+                            <span class="user-name">John Doe</span>
+                            <span class="plan-badge">Pinnacle</span>
+                        </div>
+                        <button class="logout-btn">
+                            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; font-size: 13px; color: #64748b;">
+                    ✅ Shows premium status visibly<br>
+                    ✅ Easy to identify plan at a glance<br>
+                    ⚠️ Takes more horizontal space
+                </div>
+            </div>
+            
+            <!-- Option 3 -->
+            <div class="mockup-card">
+                <div class="mockup-title">Option 3: Simple - Name Only</div>
+                <div class="mockup-description">
+                    Shows only the user's name. No role or plan information. Clean and minimalist.
+                </div>
+                <div class="header-mockup">
+                    <div class="logo">gradnext</div>
+                    <div class="nav-links">
+                        <span class="nav-link">Home</span>
+                        <span class="nav-link">Subscription</span>
+                        <span class="nav-link">Coaching</span>
+                        <span class="nav-link">Pricing</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-simple">
+                            <div class="user-avatar">JD</div>
+                            <span class="user-name">John Doe</span>
+                        </div>
+                        <button class="logout-btn">
+                            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; font-size: 13px; color: #64748b;">
+                    ✅ Very clean and minimal<br>
+                    ✅ Saves space<br>
+                    ⚠️ No role/plan visibility
+                </div>
+            </div>
+            
+            <!-- Option 4 -->
+            <div class="mockup-card">
+                <div class="mockup-title">Option 4: Avatar with Hover Tooltip</div>
+                <div class="mockup-description">
+                    Shows only the profile picture. Hover reveals a tooltip with name and plan. Click goes to dashboard.
+                </div>
+                <div class="header-mockup">
+                    <div class="logo">gradnext</div>
+                    <div class="nav-links">
+                        <span class="nav-link">Home</span>
+                        <span class="nav-link">Subscription</span>
+                        <span class="nav-link">Coaching</span>
+                        <span class="nav-link">Pricing</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar-only">
+                            <div class="user-avatar">JD</div>
+                            <div class="tooltip">
+                                <div class="tooltip-name">John Doe</div>
+                                <div class="tooltip-plan">Pinnacle User</div>
+                            </div>
+                        </div>
+                        <button class="logout-btn">
+                            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; font-size: 13px; color: #64748b;">
+                    ✅ Most minimal space usage<br>
+                    ✅ Modern and sleek<br>
+                    ⚠️ Info hidden until hover
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; padding: 24px; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(46, 53, 88, 0.08);">
+            <h2 style="color: #2e3558; margin-bottom: 16px;">Recommendation</h2>
+            <p style="color: #64748b; font-size: 15px; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+                <strong style="color: #2e3558;">Option 1 (Dropdown)</strong> provides the best balance of cleanliness and functionality. 
+                It keeps the header minimal while providing easy access to all user information and actions when needed.
+                <br><br>
+                <strong style="color: #2e3558;">Option 2 (Badge)</strong> is great if you want to highlight premium users and their plan visibility.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "summary": "Iteration 69 — admin-editable cohort plans + session_type. Backend 7/7 PASS in /app/backend/tests/test_iter69_cohort_plans.py: PUT /api/admin/cohort-programs/{id} accepts and persists `plans[]` (with name/price/cadence/blurb/features/cta/highlight/badge) and `sessions[].session_type`; public GET /api/cohorts/featured surfaces both admin-saved values and falls back to the 3 default tiers when plans:[]. Coupon + create-order regression PASS. Public landing live-verified on /cohort: highlighted plan's `feat A` / `feat B` and CTA `Join Cohort` render, AND the 8-item hardcoded fallback list (e.g. 'Frameworks playbook') is absent — confirming SinglePlan is reading from cohort.plans. Cleanup ran: cohort reset to plans:[] sessions:[].",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Cohort.jsx SinglePlan", "issue": "Custom plan `badge` field (e.g. 'Custom Test Badge') was not found in the rendered body text on /cohort even though the highlighted plan's features and CTA do render. Either the SinglePlan component does not surface the plan.badge string, or it overrides with a hardcoded label. Worth verifying line ~489 reads/renders `plan.badge`.", "selector": "n/a (text search on /cohort body)", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter69_cohort_plans.py",
+    "/app/test_reports/pytest/iter69_cohort_plans.xml"
+  ],
+  "action_items": [
+    "Verify Cohort.jsx SinglePlan renders plan.badge from cohort.plans (highlighted plan). The features list, CTA text, and fallback-suppression all work; only the badge string did not appear in DOM body text during live test."
+  ],
+  "critical_code_review_comments": [
+    "Backend models look clean: CohortPlan + Cohort.plans:List[CohortPlan] and CohortSession.session_type added correctly, with `Field(default_factory=list)` so older docs/inputs missing `plans` still validate. _public_cohort uses `cohort.get('plans') or DEFAULT_COHORT_TEMPLATE['plans']` which correctly treats empty list as falsy → fallback to 3 default tiers (verified). session_type is exposed in the public sessions list.",
+    "Admin PUT path passes `body.dict(exclude_none=False)` so explicit `plans:[]` from frontend overwrites existing — good. Slug uniqueness + session-id preservation logic unchanged.",
+    "Frontend admin CohortProgramsAdmin.jsx: data-testids match request spec (cohort-form-add-plan-btn, cohort-form-plan-name-{idx}, cohort-form-plan-highlight-{idx}, cohort-form-plan-add-feature-{idx}, cohort-form-plan-feature-{idx}-{fIdx}, cohort-form-session-type-{idx}). add/remove/update helpers for plans + features look correct. Code-review verified.",
+    "Live admin UI Playwright check could not click the edit button selector cohort-admin-edit-case-interview-sprint within timeout (page navigation through /admin → 'Cohort' nav settled, but the row didn't render in time). Setting up admin via API PUT (status 200) bypassed this and verified backend persistence; data-testids confirmed via code review."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter69_cohort_plans.py (new)"
+  ],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "Public landing: 4/5 assertions (feat A, feat B, custom CTA, no-fallback) PASS; badge not surfaced. Admin UI: code-reviewed, API-verified (live click flow timed out)."},
+  "test_credentials": "POST /api/auth/mock-login?user_type=admin / subscription. Featured cohort id da572c95-ffa5-4899-bd8a-6717c552116b.",
+  "seed_data_creation": "None permanent. Cohort was temporarily set with 2 custom plans + 1 session for verification, then reset to plans:[] sessions:[] (matches dev seed state) by both backend cleanup test and Playwright cleanup PUT.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend test test_iter69_cohort_plans.py auto-resets the cohort plans:[]/sessions:[] at the end. The public landing badge rendering is the one open question — verify Cohort.jsx SinglePlan actually outputs plan.badge in DOM (check the JSX, not the source data, since features+CTA flow correctly).",
+  "rca of the issue": "Public landing badge: the highlighted plan IS the one being read (CTA + features correctly come from it), so cohort.plans selection logic is fine. The badge string 'Custom Test Badge' simply did not surface in body.innerText — likely either rendered inside an aria-hidden node, hidden by overflow, or the SinglePlan component does not bind plan.badge at all. Visual diff confirms only feat list + CTA were updated."
+}
