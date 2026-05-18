@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import { fetchCurrentUser } from '../utils/authCache';
@@ -117,20 +117,19 @@ const Coaching = () => {
   }, [location.hash]);
 
   useEffect(() => {
+    const PLAN_ORDER = ['last_mile', 'mid_mile', 'full_prep', 'pinnacle'];
+
     const fetchPlans = async () => {
       try {
-        // Fetch all plans without page filter, then filter client-side for coaching plans
         const res = await fetch(`${BACKEND_URL}/api/resources/plans`);
         if (res.ok) {
           const data = await res.json();
-          // Filter for coaching category plans and sort by predefined order
-          const planOrder = ['last_mile', 'mid_mile', 'full_prep', 'pinnacle'];
           const coachingPlansData = (data.plans || [])
             .filter(p => p.category === 'coaching')
             .sort((a, b) => {
-              const aIndex = planOrder.indexOf(a.plan_key);
-              const bIndex = planOrder.indexOf(b.plan_key);
-              return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+              const ai = PLAN_ORDER.indexOf(a.plan_key);
+              const bi = PLAN_ORDER.indexOf(b.plan_key);
+              return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
             });
           setCoachingPlans(coachingPlansData);
         }
@@ -140,22 +139,19 @@ const Coaching = () => {
         setPlansLoading(false);
       }
     };
-    fetchPlans();
-    
-    // Check if user is already logged in
-    checkAuth();
-  }, []);
 
-  const checkAuth = async () => {
-    try {
-      const data = await fetchCurrentUser();
-      if (data) {
-        setCurrentUser(data);
+    const checkAuth = async () => {
+      try {
+        const data = await fetchCurrentUser();
+        if (data) setCurrentUser(data);
+      } catch (error) {
+        console.error('Auth check failed:', error);
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-    }
-  };
+    };
+
+    // Run both in parallel — auth does not depend on plans
+    Promise.all([fetchPlans(), checkAuth()]);
+  }, []);
 
   const handleEnrollClick = (plan) => {
     setSelectedPlan(plan);

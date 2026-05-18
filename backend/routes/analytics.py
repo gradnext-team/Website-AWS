@@ -120,47 +120,29 @@ async def get_analytics_overview(
     
     # ---- Subscription Metrics ----
     if category in ["total", "subscription"]:
-        # Active subscriptions
-        active_subs = await db.users.count_documents({
-            "subscription.status": "active",
-            "plan": {"$nin": ["free_trial", None, ""]}
-        })
-        
-        # Free trial users
-        free_trial_users = await db.users.count_documents({
-            "plan": "free_trial"
-        })
-        
-        # Subscribers gained in date range
-        subs_gained = await db.users.count_documents({
-            "subscription.created_at": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()},
-            "plan": {"$nin": ["free_trial", None, ""]}
-        })
-        
-        # Subscribers lost (cancelled) in date range
-        subs_lost = await db.users.count_documents({
-            "subscription.cancelled_at": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}
-        })
-        
-        # Free to paid conversion (candidates only)
-        total_free_trial_ever = await db.users.count_documents({
-            "created_at": {"$exists": True},
-            "is_mentor": {"$ne": True},
-            "is_admin": {"$ne": True}
-        })
-        converted_users = await db.users.count_documents({
-            "plan": {"$nin": ["free_trial", None, ""]},
-            "subscription.status": "active",
-            "is_mentor": {"$ne": True},
-            "is_admin": {"$ne": True}
-        })
+        date_start_iso = start_date.isoformat()
+        date_end_iso = end_date.isoformat()
+
+        # All subscription counts in a single aggregation round-trip
+        sub_facet = await db.users.aggregate([{"$facet": {
+            "active_subs": [{"$match": {"subscription.status": "active", "plan": {"$nin": ["free_trial", None, ""]}}}, {"$count": "n"}],
+            "free_trial": [{"$match": {"plan": "free_trial"}}, {"$count": "n"}],
+            "gained": [{"$match": {"subscription.created_at": {"$gte": date_start_iso, "$lte": date_end_iso}, "plan": {"$nin": ["free_trial", None, ""]}}}, {"$count": "n"}],
+            "lost": [{"$match": {"subscription.cancelled_at": {"$gte": date_start_iso, "$lte": date_end_iso}}}, {"$count": "n"}],
+            "total_candidates": [{"$match": {"is_mentor": {"$ne": True}, "is_admin": {"$ne": True}}}, {"$count": "n"}],
+            "converted": [{"$match": {"plan": {"$nin": ["free_trial", None, ""]}, "subscription.status": "active", "is_mentor": {"$ne": True}, "is_admin": {"$ne": True}}}, {"$count": "n"}],
+            "plan_dist": [{"$match": {"plan": {"$in": ["basic_plan", "pro_plan", "pro_plus", "free_trial"]}}}, {"$group": {"_id": "$plan", "count": {"$sum": 1}}}]
+        }}]).to_list(1)
+
+        sf = sub_facet[0] if sub_facet else {}
+        active_subs = sf.get("active_subs", [{}])[0].get("n", 0)
+        free_trial_users = sf.get("free_trial", [{}])[0].get("n", 0)
+        subs_gained = sf.get("gained", [{}])[0].get("n", 0)
+        subs_lost = sf.get("lost", [{}])[0].get("n", 0)
+        total_free_trial_ever = sf.get("total_candidates", [{}])[0].get("n", 0)
+        converted_users = sf.get("converted", [{}])[0].get("n", 0)
         free_to_paid_rate = (converted_users / total_free_trial_ever * 100) if total_free_trial_ever > 0 else 0
-        
-        # Plan distribution
-        plan_dist = {}
-        for plan in ["basic_plan", "pro_plan", "pro_plus", "free_trial"]:
-            count = await db.users.count_documents({"plan": plan})
-            plan_dist[plan] = count
+        plan_dist = {row["_id"]: row["count"] for row in sf.get("plan_dist", []) if row.get("_id")}
         
         result["metrics"]["subscription"] = {
             "active_subscriptions": active_subs,
@@ -239,14 +221,25 @@ async def get_analytics_overview(
             "date": {"$gte": start_str, "$lte": end_str}
         }).to_list(1000)
         
+        # Batch-fetch mentor rates for sessions missing an override (avoids N+1)
+        missing_rate_ids = list({
+            s.get("mentor_id") for s in completed_sessions
+            if s.get("payment_status") == "paid" and not s.get("payment_amount_override")
+        })
+        mentor_rates: dict = {}
+        if missing_rate_ids:
+            mentors_cursor = db.mentors.find(
+                {"id": {"$in": missing_rate_ids}},
+                {"id": 1, "hourly_rate": 1}
+            )
+            async for m in mentors_cursor:
+                mentor_rates[m["id"]] = m.get("hourly_rate", 1500)
+
         total_payout = 0
         paid_sessions = 0
         for session in completed_sessions:
             if session.get("payment_status") == "paid":
-                amount = session.get("payment_amount_override")
-                if not amount:
-                    mentor = await db.mentors.find_one({"id": session.get("mentor_id")})
-                    amount = mentor.get("hourly_rate", 1500) if mentor else 1500
+                amount = session.get("payment_amount_override") or mentor_rates.get(session.get("mentor_id"), 1500)
                 total_payout += amount
                 paid_sessions += 1
         
@@ -276,10 +269,13 @@ async def get_subscriber_trends(
     
     start_date, end_date = parse_date_range(date_from, date_to)
     
-    # Get all users with subscription dates
+    # Fetch only users whose subscription activity falls within the date range
     users = await db.users.find({
-        "subscription.created_at": {"$exists": True}
-    }, {"_id": 0, "subscription": 1, "plan": 1}).to_list(10000)
+        "$or": [
+            {"subscription.created_at": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}},
+            {"subscription.cancelled_at": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}}
+        ]
+    }, {"_id": 0, "subscription": 1, "plan": 1}).to_list(5000)
     
     # Group by date
     gained_by_date = {}
@@ -348,11 +344,12 @@ async def get_revenue_trends(
     
     start_date, end_date = parse_date_range(date_from, date_to)
     
-    # Get payments
+    # Get payments filtered to the requested date range at DB level
     payments = await db.payments.find({
-        "status": "captured"
-    }, {"_id": 0}).to_list(10000)
-    
+        "status": "captured",
+        "created_at": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}
+    }, {"_id": 0, "created_at": 1, "amount": 1}).to_list(2000)
+
     # Group by date
     revenue_by_date = {}
     for p in payments:
@@ -500,34 +497,36 @@ async def get_session_trends(
     start_str = start_date.strftime("%Y-%m-%d")
     end_str = end_date.strftime("%Y-%m-%d")
     
+    # Replace per-day count loop with two aggregations (2 DB calls instead of N×2)
+    date_filter = {"status": "completed", "date": {"$gte": start_str, "$lte": end_str}}
+    group_by_date = [
+        {"$match": date_filter},
+        {"$group": {"_id": "$date", "count": {"$sum": 1}}}
+    ]
+
+    coaching_by_date: dict[str, int] = {}
+    peer_by_date: dict[str, int] = {}
+
+    if session_type in ["all", "coaching"]:
+        async for doc in db.bookings.aggregate(group_by_date):
+            coaching_by_date[doc["_id"]] = doc["count"]
+
+    if session_type in ["all", "peer"]:
+        async for doc in db.peer_sessions.aggregate(group_by_date):
+            peer_by_date[doc["_id"]] = doc["count"]
+
     trends = []
     current = start_date
-    
     while current <= end_date:
         date_key = current.strftime("%Y-%m-%d")
-        
-        coaching_count = 0
-        peer_count = 0
-        
-        if session_type in ["all", "coaching"]:
-            coaching_count = await db.bookings.count_documents({
-                "date": date_key,
-                "status": "completed"
-            })
-        
-        if session_type in ["all", "peer"]:
-            peer_count = await db.peer_sessions.count_documents({
-                "date": date_key,
-                "status": "completed"
-            })
-        
+        coaching_count = coaching_by_date.get(date_key, 0)
+        peer_count = peer_by_date.get(date_key, 0)
         trends.append({
             "date": date_key,
             "coaching": coaching_count,
             "peer": peer_count,
             "total": coaching_count + peer_count
         })
-        
         current += timedelta(days=1)
     
     return {
@@ -556,10 +555,10 @@ async def get_retention_metrics(
     
     start_date, end_date = parse_date_range(date_from, date_to)
     
-    # Get all users with subscriptions
+    # Get users with subscriptions using a minimal projection
     users = await db.users.find({
         "subscription": {"$exists": True}
-    }, {"_id": 0}).to_list(10000)
+    }, {"_id": 0, "subscription": 1, "created_at": 1}).to_list(5000)
     
     # Calculate metrics
     total_subs = len(users)
@@ -594,10 +593,17 @@ async def get_retention_metrics(
     renewal_rate = 100 - churn_rate
     avg_duration = (total_duration_days / churned_duration_count) if churned_duration_count > 0 else 0
     
-    # Get average revenue per user
-    payments = await db.payments.find({"status": "captured"}).to_list(10000)
-    total_revenue = sum(p.get("amount", 0) for p in payments)
-    paying_users = len(set(p.get("user_id") for p in payments if p.get("user_id")))
+    # Aggregate total revenue and distinct paying users in one DB round-trip
+    rev_agg = await db.payments.aggregate([
+        {"$match": {"status": "captured"}},
+        {"$group": {
+            "_id": None,
+            "total_revenue": {"$sum": "$amount"},
+            "user_ids": {"$addToSet": "$user_id"}
+        }}
+    ]).to_list(1)
+    total_revenue = rev_agg[0]["total_revenue"] if rev_agg else 0
+    paying_users = len([u for u in (rev_agg[0]["user_ids"] if rev_agg else []) if u])
     avg_revenue_per_user = (total_revenue / paying_users) if paying_users > 0 else 0
     
     # Lifetime Value estimate (ARPU * avg duration in months)

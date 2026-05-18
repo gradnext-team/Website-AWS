@@ -7,6 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import asyncio
 import os
 import logging
+from datetime import datetime
 from pathlib import Path
 from contextlib import asynccontextmanager
 
@@ -91,9 +92,20 @@ async def lifespan(app: FastAPI):
         
         # Seed the database
         await seed_database(db)
-        
-        # Sync AI drills (runs on EVERY startup to ensure production/dev stay in sync)
-        await seed_ai_drills(db)
+
+        # Sync AI drills once per day (skip if already synced today)
+        _drill_meta = await db.metadata.find_one({"key": "ai_drills_synced_date"})
+        _today = datetime.now().strftime("%Y-%m-%d")
+        if not _drill_meta or _drill_meta.get("value") != _today:
+            await seed_ai_drills(db)
+            await db.metadata.update_one(
+                {"key": "ai_drills_synced_date"},
+                {"$set": {"value": _today}},
+                upsert=True
+            )
+            logging.info(f"AI drills synced for {_today}")
+        else:
+            logging.info("AI drills already synced today, skipping")
         
         # CRITICAL: Clean up mentor ratings on EVERY startup
         # Remove 5.0 ratings from mentors with 0 sessions or no feedback
@@ -154,13 +166,29 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning(f"⚠️ Slot reservations index creation note: {e}")
 
+        # Performance indexes for analytics and coaching queries
+        try:
+            await db.payments.create_index([("status", 1), ("created_at", 1)], name="payment_status_date")
+            await db.payments.create_index([("user_id", 1), ("status", 1)], name="payment_user_status")
+            await db.users.create_index([("subscription.created_at", 1)], name="user_sub_created_at")
+            await db.users.create_index([("subscription.cancelled_at", 1)], name="user_sub_cancelled_at")
+            await db.users.create_index([("plan", 1), ("subscription.status", 1)], name="user_plan_sub_status")
+            await db.users.create_index([("is_mentor", 1), ("is_admin", 1), ("created_at", 1)], name="user_role_created")
+            await db.bookings.create_index([("mentor_id", 1), ("status", 1), ("date", 1)], name="booking_mentor_status_date")
+            await db.bookings.create_index([("status", 1), ("date", 1)], name="booking_status_date")
+            await db.bookings.create_index([("user_id", 1), ("status", 1)], name="booking_user_status")
+            await db.peer_sessions.create_index([("status", 1), ("date", 1)], name="peer_session_status_date")
+            await db.candidate_feedbacks.create_index([("mentor_id", 1), ("created_at", -1)], name="feedback_mentor_date")
+            logger.info("✅ Performance indexes ensured")
+        except Exception as e:
+            logger.warning(f"⚠️ Performance index creation note: {e}")
+
         # Run startup migrations to ensure data consistency
         from migrations.startup_migrations import run_startup_migrations
         await run_startup_migrations(db)
 
-        # Pre-warm ALL persistent images into RAM so /api/images/{id}
-        # never hits MongoDB on user requests (40+ images per coaching page).
-        await _prewarm_image_cache(db)
+        # Pre-warm persistent images in the background so startup is not blocked
+        asyncio.create_task(_prewarm_image_cache(db))
     except Exception as e:
         logging.error(f"Startup error: {e}")
         # Don't crash - allow app to start for health checks
