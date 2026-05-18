@@ -501,27 +501,18 @@ async def get_all_users(request: Request, skip: int = 0, limit: int = 100, searc
     plans = await db.plans.find({}, {"_id": 0}).to_list(50)
     plans_map = {p.get("plan_key"): p for p in plans}
     
-    # If filtering by category, we need to fetch more and filter in memory
-    # because plan_category is computed from the plans collection
+    # Push plan_category filter to the DB query using known plan keys
     if plan_category and plan_category != 'all':
-        # Fetch all matching users for category filtering
-        users = await db.users.find(user_filter, {"_id": 0}).to_list(10000)
-        
-        # Enrich and filter by category
-        enriched_users = []
-        for user in users:
-            plan_key = user.get("plan")
-            plan_config = plans_map.get(plan_key, {})
-            category = plan_config.get("category", "subscription")
-            
-            if category == plan_category:
-                enriched_user = enrich_user_with_plan_defaults(user, plan_config)
-                enriched_users.append(enriched_user)
-        
-        total = len(enriched_users)
-        # Apply pagination after filtering
-        paginated_users = enriched_users[skip:skip + limit]
-        return {"users": paginated_users, "total": total}
+        matching_keys = [pk for pk, p in plans_map.items() if p.get("category") == plan_category]
+        if matching_keys:
+            user_filter["plan"] = {"$in": matching_keys}
+        else:
+            return {"users": [], "total": 0}
+
+        total = await db.users.count_documents(user_filter)
+        users = await db.users.find(user_filter, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+        enriched_users = [enrich_user_with_plan_defaults(u, plans_map.get(u.get("plan"), {})) for u in users]
+        return {"users": enriched_users, "total": total}
     
     # No category filter - use efficient DB pagination
     users = await db.users.find(user_filter, {"_id": 0}).skip(skip).limit(limit).to_list(limit)

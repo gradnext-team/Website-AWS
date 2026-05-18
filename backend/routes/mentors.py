@@ -174,12 +174,12 @@ async def _get_mentors_listing(db, featured_only: bool = False, slim: bool = Fal
     # Get all mentor IDs for batched queries
     mentor_ids = [m.get("id") for m in mentors if m.get("id")]
     
-    # Batch query 1: Get all feedbacks for all mentors at once
+    # Batch query 1: latest feedbacks for all mentors (cap at 50 per mentor)
     all_feedbacks = await db.candidate_feedbacks.find(
         {"mentor_id": {"$in": mentor_ids}},
         {"mentor_id": 1, "rating_overall": 1, "is_historical": 1, "created_at": 1}
-    ).to_list(5000)
-    
+    ).sort("created_at", -1).to_list(min(2000, len(mentor_ids) * 50))
+
     # Group feedbacks by mentor_id
     feedbacks_by_mentor = {}
     for f in all_feedbacks:
@@ -187,12 +187,12 @@ async def _get_mentors_listing(db, featured_only: bool = False, slim: bool = Fal
         if mid not in feedbacks_by_mentor:
             feedbacks_by_mentor[mid] = []
         feedbacks_by_mentor[mid].append(f)
-    
-    # Batch query 2: Get all bookings for all mentors at once
+
+    # Batch query 2: bookings per mentor (cap at 200 per mentor)
     all_bookings = await db.bookings.find(
         {"mentor_id": {"$in": mentor_ids}, "status": {"$in": ["confirmed", "completed"]}},
         {"mentor_id": 1, "date": 1, "time_slot": 1, "status": 1, "completion_status": 1}
-    ).to_list(5000)
+    ).to_list(min(2000, len(mentor_ids) * 200))
     
     # Group bookings by mentor_id
     bookings_by_mentor = {}

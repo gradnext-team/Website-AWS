@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
+import asyncio
 import uuid
 
 from routes.auth import get_current_user, get_db
@@ -72,107 +73,89 @@ async def get_sales_metrics(request: Request):
     now = datetime.utcnow()
     first_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     last_month_start = (first_of_month - timedelta(days=1)).replace(day=1)
-    
-    # ========== INVOICES (Manual/Admin Created) ==========
-    invoices = await db.invoices.find({}, {"_id": 0}).to_list(10000)
-    
-    invoice_revenue = sum(inv.get("amount", 0) for inv in invoices if inv.get("status") == "paid")
-    paid_invoices = len([inv for inv in invoices if inv.get("status") == "paid"])
-    pending_invoices = len([inv for inv in invoices if inv.get("status") == "pending"])
-    refunded_invoices = len([inv for inv in invoices if inv.get("status") == "refunded"])
-    
-    # ========== SUBSCRIPTION PAYMENTS (Razorpay) ==========
-    payments = await db.payments.find({"status": "captured"}, {"_id": 0}).to_list(10000)
-    
-    subscription_revenue = sum(p.get("amount", 0) for p in payments)
-    total_subscriptions = len(payments)
-    
-    # ========== COMBINED METRICS ==========
-    total_revenue = invoice_revenue + subscription_revenue
-    total_transactions = paid_invoices + total_subscriptions
-    
-    # This month's revenue (combined)
-    this_month_invoice_revenue = sum(
-        inv.get("amount", 0) for inv in invoices 
-        if inv.get("status") == "paid" and parse_datetime_safe(inv.get("created_at")) and 
-        parse_datetime_safe(inv.get("created_at")) >= first_of_month
+    this_month_iso = first_of_month.isoformat()
+    last_month_iso = last_month_start.isoformat()
+
+    # ========== INVOICES — aggregate in DB instead of loading all records ==========
+    invoice_agg, payment_agg, users_by_plan_agg = await asyncio.gather(
+        db.invoices.aggregate([{"$facet": {
+            "all_paid":       [{"$match": {"status": "paid"}},    {"$group": {"_id": None, "total": {"$sum": "$amount"}, "count": {"$sum": 1}}}],
+            "pending":        [{"$match": {"status": "pending"}}, {"$count": "n"}],
+            "refunded":       [{"$match": {"status": "refunded"}},{"$count": "n"}],
+            "this_month":     [{"$match": {"status": "paid", "created_at": {"$gte": this_month_iso}}}, {"$group": {"_id": None, "total": {"$sum": "$amount"}}}],
+            "last_month":     [{"$match": {"status": "paid", "created_at": {"$gte": last_month_iso, "$lt": this_month_iso}}}, {"$group": {"_id": None, "total": {"$sum": "$amount"}}}],
+            "by_plan":        [{"$match": {"status": "paid"}}, {"$group": {"_id": "$plan", "total": {"$sum": "$amount"}}}],
+        }}]).to_list(1),
+        db.payments.aggregate([{"$facet": {
+            "all_captured":   [{"$match": {"status": "captured"}}, {"$group": {"_id": None, "total": {"$sum": "$amount"}, "count": {"$sum": 1}}}],
+            "this_month":     [{"$match": {"status": "captured", "created_at": {"$gte": this_month_iso}}}, {"$group": {"_id": None, "total": {"$sum": "$amount"}}}],
+            "last_month":     [{"$match": {"status": "captured", "created_at": {"$gte": last_month_iso, "$lt": this_month_iso}}}, {"$group": {"_id": None, "total": {"$sum": "$amount"}}}],
+            "by_plan":        [{"$match": {"status": "captured"}}, {"$group": {"_id": {"$ifNull": ["$plan_key", "$plan_name"]}, "total": {"$sum": "$amount"}}}],
+        }}]).to_list(1),
+        db.users.aggregate([{"$group": {"_id": "$plan", "count": {"$sum": 1}}}]).to_list(50),
     )
+
+    ia = invoice_agg[0] if invoice_agg else {}
+    pa = payment_agg[0] if payment_agg else {}
+
+    invoice_revenue       = (ia.get("all_paid")   or [{}])[0].get("total", 0)
+    paid_invoices         = (ia.get("all_paid")   or [{}])[0].get("count", 0)
+    pending_invoices      = (ia.get("pending")    or [{}])[0].get("n", 0)
+    refunded_invoices     = (ia.get("refunded")   or [{}])[0].get("n", 0)
+    this_month_invoice_revenue  = (ia.get("this_month") or [{}])[0].get("total", 0)
+    last_month_invoice_revenue  = (ia.get("last_month") or [{}])[0].get("total", 0)
+
+    subscription_revenue        = (pa.get("all_captured") or [{}])[0].get("total", 0)
+    total_subscriptions         = (pa.get("all_captured") or [{}])[0].get("count", 0)
+    this_month_subscription_revenue = (pa.get("this_month") or [{}])[0].get("total", 0)
+    last_month_subscription_revenue = (pa.get("last_month") or [{}])[0].get("total", 0)
+
+    total_revenue       = invoice_revenue + subscription_revenue
+    total_transactions  = paid_invoices + total_subscriptions
+    this_month_revenue  = this_month_invoice_revenue + this_month_subscription_revenue
+    last_month_revenue  = last_month_invoice_revenue + last_month_subscription_revenue
+
+    revenue_by_plan: dict = {}
+    for row in ia.get("by_plan", []):
+        revenue_by_plan[row["_id"] or "unknown"] = row["total"]
+    for row in pa.get("by_plan", []):
+        key = row["_id"] or "unknown"
+        revenue_by_plan[key] = revenue_by_plan.get(key, 0) + row["total"]
+
+    revenue_by_source = {"invoices": invoice_revenue, "subscriptions": subscription_revenue}
+
+    users_by_plan = {row["_id"] or "free_trial": row["count"] for row in users_by_plan_agg}
     
-    this_month_subscription_revenue = sum(
-        p.get("amount", 0) for p in payments 
-        if parse_datetime_safe(p.get("created_at")) and 
-        parse_datetime_safe(p.get("created_at")) >= first_of_month
-    )
-    
-    this_month_revenue = this_month_invoice_revenue + this_month_subscription_revenue
-    
-    # Last month's revenue (combined)
-    last_month_invoice_revenue = sum(
-        inv.get("amount", 0) for inv in invoices 
-        if inv.get("status") == "paid" and parse_datetime_safe(inv.get("created_at")) and 
-        last_month_start <= parse_datetime_safe(inv.get("created_at")) < first_of_month
-    )
-    
-    last_month_subscription_revenue = sum(
-        p.get("amount", 0) for p in payments 
-        if parse_datetime_safe(p.get("created_at")) and 
-        last_month_start <= parse_datetime_safe(p.get("created_at")) < first_of_month
-    )
-    
-    last_month_revenue = last_month_invoice_revenue + last_month_subscription_revenue
-    
-    # Revenue by plan (combined)
-    revenue_by_plan = {}
-    
-    # From invoices
-    for inv in invoices:
-        if inv.get("status") == "paid":
-            plan = inv.get("plan", "unknown")
-            revenue_by_plan[plan] = revenue_by_plan.get(plan, 0) + inv.get("amount", 0)
-    
-    # From subscription payments
-    for p in payments:
-        plan = p.get("plan_key") or p.get("plan_name", "unknown")
-        revenue_by_plan[plan] = revenue_by_plan.get(plan, 0) + p.get("amount", 0)
-    
-    # Revenue by source
-    revenue_by_source = {
-        "invoices": invoice_revenue,
-        "subscriptions": subscription_revenue
-    }
-    
-    # Get user count by plan
-    users = await db.users.find({}, {"_id": 0, "plan": 1}).to_list(10000)
-    users_by_plan = {}
-    for user in users:
-        plan = user.get("plan", "free_trial")
-        users_by_plan[plan] = users_by_plan.get(plan, 0) + 1
-    
-    # Monthly revenue trend (last 6 months) - combined
+    # Monthly revenue trend (last 6 months) — single aggregation instead of Python loops
     monthly_trend = []
+    month_bounds = []
     for i in range(5, -1, -1):
-        month_start = (now.replace(day=1) - timedelta(days=i*30)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        month_end = (month_start + timedelta(days=32)).replace(day=1)
-        
-        # Invoice revenue for this month
-        month_invoice_rev = sum(
-            inv.get("amount", 0) for inv in invoices 
-            if inv.get("status") == "paid" and parse_datetime_safe(inv.get("created_at")) and 
-            month_start <= parse_datetime_safe(inv.get("created_at")) < month_end
-        )
-        
-        # Subscription revenue for this month
-        month_sub_rev = sum(
-            p.get("amount", 0) for p in payments 
-            if parse_datetime_safe(p.get("created_at")) and 
-            month_start <= parse_datetime_safe(p.get("created_at")) < month_end
-        )
-        
+        ms = (now.replace(day=1) - timedelta(days=i * 30)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        me = (ms + timedelta(days=32)).replace(day=1)
+        month_bounds.append((ms, me))
+
+    monthly_invoice_agg, monthly_payment_agg = await asyncio.gather(
+        db.invoices.aggregate([
+            {"$match": {"status": "paid", "created_at": {"$gte": month_bounds[0][0].isoformat()}}},
+            {"$group": {"_id": {"$substr": ["$created_at", 0, 7]}, "total": {"$sum": "$amount"}}}
+        ]).to_list(12),
+        db.payments.aggregate([
+            {"$match": {"status": "captured", "created_at": {"$gte": month_bounds[0][0].isoformat()}}},
+            {"$group": {"_id": {"$substr": ["$created_at", 0, 7]}, "total": {"$sum": "$amount"}}}
+        ]).to_list(12),
+    )
+    inv_by_month = {r["_id"]: r["total"] for r in monthly_invoice_agg}
+    pay_by_month = {r["_id"]: r["total"] for r in monthly_payment_agg}
+
+    for ms, _ in month_bounds:
+        key = ms.strftime("%Y-%m")
+        mi = inv_by_month.get(key, 0)
+        ms_rev = pay_by_month.get(key, 0)
         monthly_trend.append({
-            "month": month_start.strftime("%b %Y"),
-            "revenue": month_invoice_rev + month_sub_rev,
-            "invoices": month_invoice_rev,
-            "subscriptions": month_sub_rev
+            "month": ms.strftime("%b %Y"),
+            "revenue": mi + ms_rev,
+            "invoices": mi,
+            "subscriptions": ms_rev,
         })
     
     return {
@@ -181,7 +164,7 @@ async def get_sales_metrics(request: Request):
         "last_month_revenue": last_month_revenue,
         "growth_percentage": round(((this_month_revenue - last_month_revenue) / max(last_month_revenue, 1)) * 100, 1) if last_month_revenue > 0 else 0,
         "total_transactions": total_transactions,
-        "total_invoices": len(invoices),
+        "total_invoices": paid_invoices + pending_invoices + refunded_invoices,
         "paid_invoices": paid_invoices,
         "pending_invoices": pending_invoices,
         "refunded_invoices": refunded_invoices,

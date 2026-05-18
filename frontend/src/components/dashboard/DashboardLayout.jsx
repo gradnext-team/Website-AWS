@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, createContext, useContext } from 'react';
 import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom';
 import axios from 'axios';
 import { trackLogin } from '../../utils/tracking';
@@ -307,12 +307,13 @@ const DashboardLayout = () => {
           console.log('[Dashboard] OAuth tokens stored successfully');
         }
         
-        await fetchPlans();
-        console.log('[Dashboard] Plans fetched, now fetching dashboard data...');
-        
-        const data = await fetchDashboardData();
+        // Fetch plans and dashboard data in parallel
+        const [, data] = await Promise.all([
+          fetchPlans(),
+          fetchDashboardData(),
+        ]);
         console.log('[Dashboard] Dashboard data result:', data ? 'success' : 'failed');
-        
+
         if (!data) {
           // Check if we have a token but API failed - might be token issue
           const token = localStorage.getItem('session_token');
@@ -324,7 +325,6 @@ const DashboardLayout = () => {
           navigate('/', { replace: true });
         } else {
           // Check if user is a mentor or admin and redirect to appropriate dashboard
-          // Mentors should always go to mentor dashboard, not candidate dashboard
           if (data.user?.is_mentor) {
             navigate('/mentor-dashboard', { replace: true });
             return;
@@ -333,25 +333,20 @@ const DashboardLayout = () => {
             navigate('/admin', { replace: true });
             return;
           }
-          
-          // Check if user needs to complete profile onboarding (only for candidates)
-          // Skip if we're already showing the set-password modal for cohort users
+
           if (!data.user?.onboarding_completed && !setPasswordParam) {
             setShowProfileOnboarding(true);
           }
-          // If user still has needs_password_setup flag, show set-password modal
           if (data.user?.needs_password_setup) {
             setShowSetPassword(true);
           }
-          
-          // Fetch active competitions for nav
-          await fetchActiveCompetitions();
-          
-          // Fetch upcoming workshops for badge
-          await fetchUpcomingWorkshops();
-          
-          // Fetch unread notification count
-          await fetchUnreadNotificationCount();
+
+          // Fetch nav extras in parallel — none block the main dashboard render
+          await Promise.all([
+            fetchActiveCompetitions(),
+            fetchUpcomingWorkshops(),
+            fetchUnreadNotificationCount(),
+          ]);
         }
         setLoading(false);
       } catch (err) {
